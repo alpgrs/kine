@@ -10,15 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InvoicingRouteImport } from './routes/invoicing'
 import { Route as InviteRouteImport } from './routes/invite'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BillingRouteImport } from './routes/billing'
+import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as AccountTeamRouteImport } from './routes/account.team'
 import { Route as AccountProfileRouteImport } from './routes/account.profile'
 import { Route as AccountOrganizationRouteImport } from './routes/account.organization'
@@ -28,9 +33,19 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientsRoute = PatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -46,6 +61,11 @@ const OfflineRoute = OfflineRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvoicingRoute = InvoicingRouteImport.update({
+  id: '/invoicing',
+  path: '/invoicing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InviteRoute = InviteRouteImport.update({
@@ -68,9 +88,19 @@ const BillingRoute = BillingRouteImport.update({
   path: '/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgendaRoute = AgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookSlugRoute = BookSlugRouteImport.update({
+  id: '/book/$slug',
+  path: '/book/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountTeamRoute = AccountTeamRouteImport.update({
@@ -91,112 +121,147 @@ const AccountOrganizationRoute = AccountOrganizationRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
+  '/invoicing': typeof InvoicingRoute
   '/login': typeof LoginRoute
   '/offline': typeof OfflineRoute
   '/onboarding': typeof OnboardingRoute
+  '/patients': typeof PatientsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/account/organization': typeof AccountOrganizationRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
+  '/invoicing': typeof InvoicingRoute
   '/login': typeof LoginRoute
   '/offline': typeof OfflineRoute
   '/onboarding': typeof OnboardingRoute
+  '/patients': typeof PatientsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/account/organization': typeof AccountOrganizationRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
+  '/invoicing': typeof InvoicingRoute
   '/login': typeof LoginRoute
   '/offline': typeof OfflineRoute
   '/onboarding': typeof OnboardingRoute
+  '/patients': typeof PatientsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/account/organization': typeof AccountOrganizationRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agenda'
     | '/billing'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
+    | '/invoicing'
     | '/login'
     | '/offline'
     | '/onboarding'
+    | '/patients'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/account/organization'
     | '/account/profile'
     | '/account/team'
+    | '/book/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agenda'
     | '/billing'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
+    | '/invoicing'
     | '/login'
     | '/offline'
     | '/onboarding'
+    | '/patients'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/account/organization'
     | '/account/profile'
     | '/account/team'
+    | '/book/$slug'
   id:
     | '__root__'
     | '/'
+    | '/agenda'
     | '/billing'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
+    | '/invoicing'
     | '/login'
     | '/offline'
     | '/onboarding'
+    | '/patients'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/account/organization'
     | '/account/profile'
     | '/account/team'
+    | '/book/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgendaRoute: typeof AgendaRoute
   BillingRoute: typeof BillingRoute
   DashboardRoute: typeof DashboardRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   InviteRoute: typeof InviteRoute
+  InvoicingRoute: typeof InvoicingRoute
   LoginRoute: typeof LoginRoute
   OfflineRoute: typeof OfflineRoute
   OnboardingRoute: typeof OnboardingRoute
+  PatientsRoute: typeof PatientsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   AccountOrganizationRoute: typeof AccountOrganizationRoute
   AccountProfileRoute: typeof AccountProfileRoute
   AccountTeamRoute: typeof AccountTeamRoute
+  BookSlugRoute: typeof BookSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -208,11 +273,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patients': {
+      id: '/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof PatientsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -234,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invoicing': {
+      id: '/invoicing'
+      path: '/invoicing'
+      fullPath: '/invoicing'
+      preLoaderRoute: typeof InvoicingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invite': {
@@ -264,11 +350,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BillingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agenda': {
+      id: '/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AgendaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book/$slug': {
+      id: '/book/$slug'
+      path: '/book/$slug'
+      fullPath: '/book/$slug'
+      preLoaderRoute: typeof BookSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/team': {
@@ -297,18 +397,23 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgendaRoute: AgendaRoute,
   BillingRoute: BillingRoute,
   DashboardRoute: DashboardRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   InviteRoute: InviteRoute,
+  InvoicingRoute: InvoicingRoute,
   LoginRoute: LoginRoute,
   OfflineRoute: OfflineRoute,
   OnboardingRoute: OnboardingRoute,
+  PatientsRoute: PatientsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   AccountOrganizationRoute: AccountOrganizationRoute,
   AccountProfileRoute: AccountProfileRoute,
   AccountTeamRoute: AccountTeamRoute,
+  BookSlugRoute: BookSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
