@@ -1,13 +1,16 @@
 {
   "common": {
-    "appName": "SaaS Core",
-    "tagline": "Het alles-in-één platform voor Belgische professionals",
+    "appName": "SanoBook",
+    "tagline": "Uw zorgpraktijk, vereenvoudigd",
     "dashboard": "Dashboard",
+    "agenda": "Agenda",
+    "patients": "Patiënten",
+    "invoicing": "Facturatie",
     "settings": "Instellingen",
     "profile": "Profiel",
-    "organization": "Organisatie",
+    "organization": "Praktijk",
     "team": "Team",
-    "billing": "Facturatie",
+    "billing": "Abonnement",
     "logout": "Afmelden",
     "save": "Opslaan",
     "cancel": "Annuleren",
@@ -24,50 +27,264 @@
     "themeSystem": "Systeem",
     "back": "Terug",
     "search": "Zoeken",
-    "noOrgYet": "Je hebt nog geen organisatie",
-    "createOrg": "Organisatie aanmaken",
-    "switchOrg": "Organisatie wisselen",
+    "noOrgYet": "Geen praktijk",
+    "createOrg": "Praktijk aanmaken",
+    "switchOrg": "Praktijk wisselen",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "today": "Vandaag",
+    "week": "Week",
+    "month": "Maand",
+    "day": "Dag",
+    "next": "Volgende",
+    "previous": "Vorige",
+    "confirm": "Bevestigen",
+    "close": "Sluiten",
+    "open": "Openen",
+    "from": "Van",
+    "to": "Tot",
+    "duration": "Duur",
+    "price": "Prijs",
+    "name": "Naam",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "address": "Adres",
+    "actions": "Acties",
+    "status": "Status",
+    "minutes": "min"
   },
   "auth": {
-    "login": "Inloggen",
+    "login": "Praktijk login",
     "signup": "Account aanmaken",
     "loginTitle": "Welkom terug",
-    "loginSubtitle": "Log in via een magic link in je inbox",
-    "signupTitle": "Maak je account aan",
-    "signupSubtitle": "Ontvang een magic link om te starten",
+    "loginSubtitle": "Meld u aan op uw praktijkruimte",
+    "signupTitle": "Maak uw praktijkaccount",
+    "signupSubtitle": "Start gratis, geen kredietkaart nodig",
     "email": "E-mailadres",
-    "sendMagicLink": "Stuur magic link",
-    "magicLinkSent": "Link verstuurd. Check je inbox.",
+    "password": "Wachtwoord",
+    "passwordPlaceholder": "Minstens 8 tekens",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "resetPassword": "Wachtwoord resetten",
+    "newPassword": "Nieuw wachtwoord",
+    "sendResetLink": "Link versturen",
+    "resetSent": "E-mail om wachtwoord te resetten verzonden",
+    "passwordUpdated": "Wachtwoord bijgewerkt",
     "alreadyAccount": "Al een account?",
     "noAccount": "Nog geen account?",
-    "checkEmail": "Check je e-mail",
-    "checkEmailDesc": "Klik op de link die we je net stuurden om in te loggen.",
+    "signInBtn": "Aanmelden",
+    "signUpBtn": "Account aanmaken",
     "invalidEmail": "Ongeldig e-mailadres",
-    "invitedToJoin": "Je bent uitgenodigd voor {{org}}",
-    "acceptInvitation": "Uitnodiging accepteren"
+    "weakPassword": "Het wachtwoord moet minstens 8 tekens bevatten",
+    "loginSuccess": "Welkom!",
+    "signupSuccess": "Account aangemaakt!"
   },
-  "billing": {
-    "currentPlan": "Huidig plan",
-    "noPlan": "Geen actief abonnement",
-    "choosePlan": "Kies een plan",
-    "perMonth": "/ maand",
-    "perYear": "/ jaar",
-    "subscribe": "Abonneren",
-    "manage": "Abonnement beheren",
-    "invoices": "Facturen",
-    "noInvoices": "Nog geen facturen",
-    "downloadPdf": "PDF downloaden",
-    "sendByEmail": "Versturen per e-mail",
-    "status": {
-      "active": "Actief",
-      "trialing": "Proef",
-      "past_due": "Achterstallig",
-      "canceled": "Geannuleerd",
-      "incomplete": "Onvolledig",
-      "paused": "Gepauzeerd"
+  "landing": {
+    "hero": {
+      "badge": "Voor kinesisten, osteopaten, logopedisten",
+      "title": "Uw zorgpraktijk,",
+      "titleAccent": "vereenvoudigd.",
+      "subtitle": "Online agenda, sms-herinneringen, facturatie conform de Belgische btw. Alles wat een zelfstandige zorgverlener nodig heeft, zonder administratieve rompslomp.",
+      "ctaPrimary": "Start gratis",
+      "ctaSecondary": "Bekijk demo"
+    },
+    "features": {
+      "title": "Alles wat nodig is, niets overbodigs",
+      "subtitle": "Ontworpen met Belgische zelfstandigen",
+      "calendar": {
+        "title": "Slimme agenda",
+        "desc": "Dag-, week- en maandweergave. Patiënten boeken 24/7 online."
+      },
+      "sms": {
+        "title": "Sms-herinneringen",
+        "desc": "Automatisch 24u voor elke afspraak. Minder no-shows."
+      },
+      "invoice": {
+        "title": "Belgische facturatie",
+        "desc": "Pdf conform artikel 44 btw-wetboek. RIZIV-nummer inbegrepen."
+      },
+      "bilingual": {
+        "title": "Tweetalig FR/NL",
+        "desc": "Interface en facturen in de taal van uw patiënten."
+      }
+    },
+    "pricing": {
+      "title": "Eenvoudige prijzen",
+      "subtitle": "Geen verplichtingen. Annuleer wanneer u wilt.",
+      "popular": "Populair",
+      "solo": {
+        "name": "Agenda Solo",
+        "price": "29",
+        "desc": "Het essentiële om online te starten",
+        "features": [
+          "Onbeperkte online agenda",
+          "Publieke boekingspagina",
+          "Sms-herinneringen",
+          "E-mail support"
+        ],
+        "cta": "Beginnen"
+      },
+      "full": {
+        "name": "Full Practice + Facturatie",
+        "price": "59",
+        "desc": "Om uw hele praktijk te runnen",
+        "features": [
+          "Alles van Solo",
+          "Belgische btw-facturatie (Art. 44)",
+          "Boekhoudkundige export",
+          "Synchronisatie met Google Calendar",
+          "Prioritaire ondersteuning"
+        ],
+        "cta": "Kies Full"
+      },
+      "perMonth": "€/maand"
+    },
+    "footer": {
+      "rights": "Alle rechten voorbehouden",
+      "madeIn": "Ontworpen in België 🇧🇪"
     }
+  },
+  "onboarding": {
+    "title": "Laten we uw praktijk instellen",
+    "subtitle": "Duurt slechts 30 seconden",
+    "fullName": "Volledige naam",
+    "fullNamePh": "Dr. Marie Dupont",
+    "practiceName": "Naam van de praktijk",
+    "practiceNamePh": "Praktijk Dupont",
+    "professionalTitle": "Specialiteit",
+    "selectTitle": "Selecteer uw specialiteit",
+    "titleKine": "Kinesist",
+    "titleOsteo": "Osteopaat",
+    "titleLogo": "Logopedist",
+    "titlePsy": "Psycholoog",
+    "titleOther": "Andere",
+    "inami": "RIZIV-nummer (optioneel)",
+    "inamiPh": "1-12345-67-890",
+    "vatStatus": "Btw-statuut",
+    "vatExempt": "Vrijgesteld van btw (Artikel 44 — medische zorg)",
+    "vatNormal": "Btw-plichtig",
+    "vatNumber": "Btw-nummer",
+    "vatNumberPh": "BE0123.456.789",
+    "finish": "Configuratie afronden"
+  },
+  "dashboard": {
+    "today": "Vandaag",
+    "todayAppointments": "Afspraken vandaag",
+    "noAppointmentsToday": "Geen afspraken vandaag",
+    "weekAppointments": "Afspraken deze week",
+    "weekRevenue": "Omzet deze week",
+    "totalPatients": "Unieke patiënten",
+    "shareLink": "Uw publieke boekingslink",
+    "copyLink": "Link kopiëren",
+    "linkCopied": "Link gekopieerd!",
+    "openLink": "Openen",
+    "upcoming": "Volgende afspraken"
+  },
+  "agenda": {
+    "title": "Agenda",
+    "newAppointment": "Nieuwe afspraak",
+    "patientName": "Naam patiënt",
+    "patientFirstName": "Voornaam",
+    "patientLastName": "Naam",
+    "patientEmail": "E-mail",
+    "patientPhone": "GSM",
+    "service": "Prestatie",
+    "selectService": "Kies een prestatie",
+    "startTime": "Datum en uur",
+    "notes": "Notities",
+    "scheduled": "Gepland",
+    "completed": "Uitgevoerd",
+    "cancelled": "Geannuleerd",
+    "noShow": "Niet opgekomen",
+    "markCompleted": "Markeer uitgevoerd",
+    "markCancelled": "Annuleren",
+    "reschedule": "Verplaatsen",
+    "noAppointments": "Geen afspraken in deze periode"
+  },
+  "patients": {
+    "title": "Patiënten",
+    "totalCount": "{{count}} patiënt(en)",
+    "lastVisit": "Laatste bezoek",
+    "totalVisits": "Bezoeken",
+    "noPatients": "Geen patiënten geregistreerd"
+  },
+  "invoicing": {
+    "title": "Facturatie",
+    "generateInvoice": "Factuur genereren",
+    "downloadPdf": "Pdf downloaden",
+    "pendingInvoicing": "Te factureren",
+    "issued": "Uitgegeven facturen",
+    "noPending": "Al uw afspraken zijn gefactureerd",
+    "noInvoices": "Geen facturen",
+    "amount": "Bedrag",
+    "number": "Factuurnr.",
+    "issuedAt": "Datum",
+    "vatExemptNotice": "Verzorging vrijgesteld van btw conform artikel 44, § 1, 2° van het Btw-Wetboek.",
+    "inami": "RIZIV-nr.",
+    "patient": "Patiënt",
+    "service": "Prestatie",
+    "subtotal": "Subtotaal",
+    "vat": "Btw",
+    "total": "Totaal",
+    "createdSuccess": "Factuur {{number}} aangemaakt"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "tabs": {
+      "practice": "Praktijk",
+      "services": "Prestaties",
+      "hours": "Uren",
+      "integrations": "Integraties"
+    },
+    "services": {
+      "title": "Uw prestaties",
+      "add": "Prestatie toevoegen",
+      "name": "Naam",
+      "duration": "Duur (min)",
+      "price": "Prijs (€)",
+      "addedSuccess": "Prestatie toegevoegd"
+    },
+    "hours": {
+      "title": "Openingsuren",
+      "subtitle": "Bepaal wanneer patiënten kunnen boeken",
+      "closed": "Gesloten"
+    },
+    "integrations": {
+      "sms": "Sms-herinneringen (Twilio)",
+      "smsDesc": "Automatische sms 24u voor elke afspraak",
+      "google": "Google Calendar",
+      "googleDesc": "Synchroniseer uw agenda met Google",
+      "mock": "Demomodus"
+    },
+    "practice": {
+      "bookingSlug": "Boekingsidentificatie",
+      "bookingSlugDesc": "Publieke link: sanobook.app/book/uw-slug",
+      "publicEmail": "Publiek contact-e-mail",
+      "publicPhone": "Publiek telefoonnummer"
+    }
+  },
+  "booking": {
+    "with": "Boeken bij",
+    "step1": "1. Kies een prestatie",
+    "step2": "2. Kies een tijdstip",
+    "step3": "3. Uw gegevens",
+    "step4": "Bevestigd!",
+    "noServices": "Deze zorgverlener heeft nog geen prestaties geconfigureerd",
+    "selectDate": "Selecteer een datum",
+    "noSlots": "Geen vrije tijden op deze dag",
+    "back": "Terug",
+    "continue": "Doorgaan",
+    "yourFirstName": "Voornaam",
+    "yourLastName": "Naam",
+    "yourEmail": "E-mail",
+    "yourPhone": "GSM (België)",
+    "phoneInvalid": "Ongeldig Belgisch GSM-nummer (vb. +32 4xx xx xx xx)",
+    "confirmBooking": "Afspraak bevestigen",
+    "confirmedTitle": "Afspraak bevestigd!",
+    "confirmedDesc": "Een bevestigingsmail werd verzonden.",
+    "smsNotice": "Een sms-herinnering wordt 24u voor de afspraak verzonden.",
+    "addToCalendar": "Toevoegen aan agenda",
+    "newBooking": "Nieuwe boeking",
+    "practitionerNotFound": "Zorgverlener niet gevonden"
   },
   "notifications": {
     "title": "Meldingen",
