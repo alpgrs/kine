@@ -14,6 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          notes: string | null
+          organization_id: string
+          patient_email: string
+          patient_first_name: string
+          patient_last_name: string
+          patient_phone: string | null
+          reminder_sent_at: string | null
+          service_id: string | null
+          sms_sent: boolean
+          start_time: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          notes?: string | null
+          organization_id: string
+          patient_email: string
+          patient_first_name: string
+          patient_last_name: string
+          patient_phone?: string | null
+          reminder_sent_at?: string | null
+          service_id?: string | null
+          sms_sent?: boolean
+          start_time: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string
+          patient_email?: string
+          patient_first_name?: string
+          patient_last_name?: string
+          patient_phone?: string | null
+          reminder_sent_at?: string | null
+          service_id?: string | null
+          sms_sent?: boolean
+          start_time?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invitations: {
         Row: {
           accepted_at: string | null
@@ -65,52 +134,77 @@ export type Database = {
         Row: {
           amount: number
           amount_excl_vat: number
+          appointment_id: string | null
           created_at: string
           currency: string
           id: string
+          inami_number: string | null
           issued_at: string
           line_items: Json
+          notes: string | null
           number: string
           organization_id: string
+          patient_email: string | null
+          patient_name: string | null
           pdf_url: string | null
           status: Database["public"]["Enums"]["invoice_status"]
           stripe_invoice_id: string | null
           vat_amount: number
+          vat_exempt: boolean
           vat_rate: number
         }
         Insert: {
           amount: number
           amount_excl_vat?: number
+          appointment_id?: string | null
           created_at?: string
           currency?: string
           id?: string
+          inami_number?: string | null
           issued_at?: string
           line_items?: Json
+          notes?: string | null
           number: string
           organization_id: string
+          patient_email?: string | null
+          patient_name?: string | null
           pdf_url?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           stripe_invoice_id?: string | null
           vat_amount?: number
+          vat_exempt?: boolean
           vat_rate?: number
         }
         Update: {
           amount?: number
           amount_excl_vat?: number
+          appointment_id?: string | null
           created_at?: string
           currency?: string
           id?: string
+          inami_number?: string | null
           issued_at?: string
           line_items?: Json
+          notes?: string | null
           number?: string
           organization_id?: string
+          patient_email?: string | null
+          patient_name?: string | null
           pdf_url?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           stripe_invoice_id?: string | null
           vat_amount?: number
+          vat_exempt?: boolean
           vat_rate?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "invoices_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "invoices_organization_id_fkey"
             columns: ["organization_id"]
@@ -214,13 +308,20 @@ export type Database = {
           address_country: string | null
           address_postal_code: string | null
           address_street: string | null
+          bio: string | null
+          booking_slug: string | null
           created_at: string
           created_by: string | null
           id: string
+          inami_number: string | null
           logo_url: string | null
           name: string
+          professional_title: string | null
+          public_email: string | null
+          public_phone: string | null
           slug: string
           updated_at: string
+          vat_exempt: boolean
           vat_number: string | null
         }
         Insert: {
@@ -228,13 +329,20 @@ export type Database = {
           address_country?: string | null
           address_postal_code?: string | null
           address_street?: string | null
+          bio?: string | null
+          booking_slug?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
+          inami_number?: string | null
           logo_url?: string | null
           name: string
+          professional_title?: string | null
+          public_email?: string | null
+          public_phone?: string | null
           slug: string
           updated_at?: string
+          vat_exempt?: boolean
           vat_number?: string | null
         }
         Update: {
@@ -242,13 +350,20 @@ export type Database = {
           address_country?: string | null
           address_postal_code?: string | null
           address_street?: string | null
+          bio?: string | null
+          booking_slug?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
+          inami_number?: string | null
           logo_url?: string | null
           name?: string
+          professional_title?: string | null
+          public_email?: string | null
+          public_phone?: string | null
           slug?: string
           updated_at?: string
+          vat_exempt?: boolean
           vat_number?: string | null
         }
         Relationships: []
@@ -331,6 +446,59 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          color: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          name: string
+          organization_id: string
+          price_cents: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name: string
+          organization_id: string
+          price_cents?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          organization_id?: string
+          price_cents?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           canceled_at: string | null
@@ -388,12 +556,57 @@ export type Database = {
           },
         ]
       }
+      working_hours: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          is_active: boolean
+          organization_id: string
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          is_active?: boolean
+          organization_id: string
+          start_time: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          organization_id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "working_hours_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       generate_invoice_number: { Args: never; Returns: string }
+      get_busy_slots: {
+        Args: { _from: string; _org_id: string; _to: string }
+        Returns: {
+          end_time: string
+          start_time: string
+        }[]
+      }
       has_org_role: {
         Args: {
           _org_id: string
@@ -411,6 +624,7 @@ export type Database = {
     Enums: {
       app_language: "fr" | "nl" | "en"
       app_role: "owner" | "editor" | "viewer"
+      appointment_status: "scheduled" | "completed" | "cancelled" | "no_show"
       invitation_status: "pending" | "accepted" | "revoked" | "expired"
       invoice_status: "draft" | "open" | "paid" | "uncollectible" | "void"
       notification_channel: "email" | "sms" | "in_app"
@@ -554,6 +768,7 @@ export const Constants = {
     Enums: {
       app_language: ["fr", "nl", "en"],
       app_role: ["owner", "editor", "viewer"],
+      appointment_status: ["scheduled", "completed", "cancelled", "no_show"],
       invitation_status: ["pending", "accepted", "revoked", "expired"],
       invoice_status: ["draft", "open", "paid", "uncollectible", "void"],
       notification_channel: ["email", "sms", "in_app"],

@@ -60,10 +60,10 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.03 260);
 
-  /* Belgian-inspired deep teal/sapphire primary */
-  --primary: oklch(0.45 0.16 230);
-  --primary-foreground: oklch(0.99 0.01 250);
-  --primary-glow: oklch(0.62 0.18 220);
+  /* Healthcare emerald-teal primary */
+  --primary: oklch(0.55 0.13 168);
+  --primary-foreground: oklch(0.99 0.01 168);
+  --primary-glow: oklch(0.7 0.14 175);
 
   --secondary: oklch(0.96 0.01 250);
   --secondary-foreground: oklch(0.22 0.04 260);
@@ -85,13 +85,13 @@
 
   --border: oklch(0.92 0.008 250);
   --input: oklch(0.92 0.008 250);
-  --ring: oklch(0.45 0.16 230);
+  --ring: oklch(0.55 0.13 168);
 
-  --sidebar: oklch(0.985 0.005 250);
-  --sidebar-foreground: oklch(0.22 0.03 260);
-  --sidebar-border: oklch(0.92 0.008 250);
-  --sidebar-accent: oklch(0.95 0.015 230);
-  --sidebar-accent-foreground: oklch(0.3 0.1 230);
+  --sidebar: oklch(0.985 0.005 168);
+  --sidebar-foreground: oklch(0.22 0.03 200);
+  --sidebar-border: oklch(0.92 0.008 168);
+  --sidebar-accent: oklch(0.95 0.025 168);
+  --sidebar-accent-foreground: oklch(0.3 0.1 168);
 }
 
 .dark {
@@ -104,9 +104,9 @@
   --popover: oklch(0.21 0.03 260);
   --popover-foreground: oklch(0.97 0.01 250);
 
-  --primary: oklch(0.7 0.16 220);
-  --primary-foreground: oklch(0.16 0.03 260);
-  --primary-glow: oklch(0.78 0.14 215);
+  --primary: oklch(0.72 0.13 170);
+  --primary-foreground: oklch(0.16 0.03 200);
+  --primary-glow: oklch(0.8 0.12 175);
 
   --secondary: oklch(0.27 0.03 260);
   --secondary-foreground: oklch(0.97 0.01 250);

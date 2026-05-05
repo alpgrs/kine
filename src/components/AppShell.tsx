@@ -5,10 +5,10 @@ import {
   LayoutDashboard,
   Settings,
   Users,
-  CreditCard,
-  Bell,
+  Calendar,
+  Receipt,
   LogOut,
-  Sparkles,
+  Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,9 +27,10 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/dashboard", labelKey: "dashboard", icon: LayoutDashboard },
-  { to: "/account/team", labelKey: "team", icon: Users },
-  { to: "/billing", labelKey: "billing", icon: CreditCard },
-  { to: "/account/profile", labelKey: "settings", icon: Settings },
+  { to: "/agenda", labelKey: "agenda", icon: Calendar },
+  { to: "/patients", labelKey: "patients", icon: Users },
+  { to: "/invoicing", labelKey: "invoicing", icon: Receipt },
+  { to: "/settings", labelKey: "settings", icon: Settings },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
