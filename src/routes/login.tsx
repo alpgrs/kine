@@ -1,9 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, Sparkles, ArrowLeft } from "lucide-react";
+import { Stethoscope, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,14 +17,17 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
-const schema = z.object({ email: z.string().trim().email() });
+const schema = z.object({
+  email: z.string().trim().email(),
+  password: z.string().min(8),
+});
 
 function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,60 +36,43 @@ function LoginPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ email });
+    const parsed = schema.safeParse({ email, password });
     if (!parsed.success) {
       toast.error(t("auth:invalidEmail"));
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email: parsed.data.email,
-      options: { emailRedirectTo: window.location.origin + "/dashboard" },
-    });
+    const { error } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
     if (error) {
       toast.error(error.message);
       return;
     }
-    setSent(true);
-    toast.success(t("auth:magicLinkSent"));
+    toast.success(t("auth:loginSuccess"));
   };
 
   return (
     <AuthShell title={t("auth:loginTitle")} subtitle={t("auth:loginSubtitle")}>
-      {sent ? (
-        <div className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Mail className="h-5 w-5" />
-          </div>
-          <h2 className="font-display text-xl font-bold">{t("auth:checkEmail")}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">{t("auth:checkEmailDesc")}</p>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">{t("auth:email")}</Label>
+          <Input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="vous@exemple.be" />
         </div>
-      ) : (
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">{t("auth:email")}</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="vous@exemple.be"
-            />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">{t("auth:password")}</Label>
+            <Link to="/forgot-password" className="text-xs text-primary hover:underline">{t("auth:forgotPassword")}</Link>
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? t("loading") : t("auth:sendMagicLink")}
-          </Button>
-          <p className="pt-2 text-center text-xs text-muted-foreground">
-            {t("auth:noAccount")}{" "}
-            <a href="/signup" className="font-medium text-primary hover:underline">
-              {t("auth:signup")}
-            </a>
-          </p>
-        </form>
-      )}
+          <Input id="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? t("loading") : t("auth:signInBtn")}
+        </Button>
+        <p className="pt-2 text-center text-xs text-muted-foreground">
+          {t("auth:noAccount")}{" "}
+          <Link to="/signup" className="font-medium text-primary hover:underline">{t("auth:signup")}</Link>
+        </p>
+      </form>
     </AuthShell>
   );
 }
@@ -103,10 +89,10 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
         }}
       />
       <header className="flex items-center justify-between px-6 py-5">
-        <a href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" />
           <span className="text-sm">{t("back")}</span>
-        </a>
+        </Link>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
           <ThemeToggle />
@@ -114,10 +100,10 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
       </header>
       <main className="mx-auto flex max-w-md flex-col items-center px-6 pb-24 pt-12">
         <div className="mb-8 flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary text-primary-foreground">
-            <Sparkles className="h-4 w-4" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary text-primary-foreground">
+            <Stethoscope className="h-5 w-5" />
           </div>
-          <span className="font-display text-xl font-bold">{t("appName")}</span>
+          <span className="font-display text-2xl font-bold">{t("appName")}</span>
         </div>
         <div className="surface-card w-full p-6 md:p-8">
           <h1 className="font-display text-2xl font-bold">{title}</h1>
