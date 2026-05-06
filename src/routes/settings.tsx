@@ -32,7 +32,7 @@ function SettingsPage() {
   const [hours, setHours] = useState<any[]>([]);
   const [smsOn, setSmsOn] = useState(false);
   const [gcalOn, setGcalOn] = useState(false);
-  const [newSvc, setNewSvc] = useState({ name: "", duration: 30, price: 50 });
+  const [newSvc, setNewSvc] = useState<{ name: string; duration: number; price: string }>({ name: "", duration: 30, price: "50" });
 
   const load = async () => {
     if (!activeOrg) return;
