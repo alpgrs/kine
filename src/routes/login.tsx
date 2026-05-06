@@ -30,25 +30,37 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const routeAfterLogin = async (uid: string) => {
+    const { data: ms } = await supabase
+      .from("memberships")
+      .select("organization_id")
+      .eq("user_id", uid)
+      .limit(1)
+      .maybeSingle();
+    void navigate({ to: ms?.organization_id ? "/dashboard" : "/onboarding" });
+  };
+
   useEffect(() => {
-    if (user) void navigate({ to: "/dashboard" });
-  }, [user, navigate]);
+    if (user) void routeAfterLogin(user.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ email, password });
+    const parsed = schema.safeParse({ email: email.trim(), password });
     if (!parsed.success) {
       toast.error(t("auth:invalidEmail"));
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
+    const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
     if (error) {
       toast.error(error.message);
       return;
     }
     toast.success(t("auth:loginSuccess"));
+    if (data.user) await routeAfterLogin(data.user.id);
   };
 
   return (

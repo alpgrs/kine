@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useOrg } from "@/providers/OrgProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { parsePriceToCents, sanitizePhone } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/settings")({
   component: () => (
@@ -31,7 +32,7 @@ function SettingsPage() {
   const [hours, setHours] = useState<any[]>([]);
   const [smsOn, setSmsOn] = useState(false);
   const [gcalOn, setGcalOn] = useState(false);
-  const [newSvc, setNewSvc] = useState({ name: "", duration: 30, price: 50 });
+  const [newSvc, setNewSvc] = useState<{ name: string; duration: number; price: string }>({ name: "", duration: 30, price: "50" });
 
   const load = async () => {
     if (!activeOrg) return;
@@ -52,14 +53,15 @@ function SettingsPage() {
   };
 
   const addSvc = async () => {
-    if (!activeOrg || !newSvc.name) return;
+    if (!activeOrg || !newSvc.name.trim()) return;
+    const cents = parsePriceToCents(newSvc.price);
     const { error } = await supabase.from("services").insert({
-      organization_id: activeOrg.id, name: newSvc.name,
-      duration_minutes: newSvc.duration, price_cents: Math.round(newSvc.price * 100),
+      organization_id: activeOrg.id, name: newSvc.name.trim(),
+      duration_minutes: newSvc.duration, price_cents: cents,
     });
     if (error) return toast.error(error.message);
     toast.success(t("settings:services.addedSuccess"));
-    setNewSvc({ name: "", duration: 30, price: 50 });
+    setNewSvc({ name: "", duration: 30, price: "50" });
     void load();
   };
 
@@ -108,7 +110,7 @@ function SettingsPage() {
                   <Input type="email" value={org?.public_email ?? ""} onChange={(e) => setOrg({ ...org, public_email: e.target.value })} onBlur={(e) => saveOrg({ public_email: e.target.value || null })} />
                 </div>
                 <div><Label>{t("settings:practice.publicPhone")}</Label>
-                  <Input value={org?.public_phone ?? ""} onChange={(e) => setOrg({ ...org, public_phone: e.target.value })} onBlur={(e) => saveOrg({ public_phone: e.target.value || null })} />
+                  <Input value={org?.public_phone ?? ""} onChange={(e) => setOrg({ ...org, public_phone: e.target.value })} onBlur={(e) => saveOrg({ public_phone: sanitizePhone(e.target.value) || null })} />
                 </div>
               </div>
               <div className="rounded-md bg-muted p-3 text-sm">
@@ -135,7 +137,7 @@ function SettingsPage() {
               <div className="grid gap-2 rounded-lg border border-dashed border-border p-3 md:grid-cols-4">
                 <Input placeholder={t("settings:services.name")} value={newSvc.name} onChange={(e) => setNewSvc({ ...newSvc, name: e.target.value })} />
                 <Input type="number" placeholder={t("settings:services.duration")} value={newSvc.duration} onChange={(e) => setNewSvc({ ...newSvc, duration: parseInt(e.target.value) || 30 })} />
-                <Input type="number" step="0.01" placeholder={t("settings:services.price")} value={newSvc.price} onChange={(e) => setNewSvc({ ...newSvc, price: parseFloat(e.target.value) || 0 })} />
+                <Input inputMode="decimal" placeholder={t("settings:services.price")} value={newSvc.price} onChange={(e) => setNewSvc({ ...newSvc, price: e.target.value })} />
                 <Button onClick={addSvc} className="gap-1"><Plus className="h-4 w-4" />{t("settings:services.add")}</Button>
               </div>
             </CardContent>

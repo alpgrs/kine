@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/providers/AuthProvider";
 import { useOrg } from "@/providers/OrgProvider";
 import { RequireAuth } from "@/components/RequireAuth";
+import { PROFESSIONS, getProfession, sanitizeInami, sanitizeVat, isValidInami, isValidBeVat } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/onboarding")({
   component: () => (
@@ -32,11 +33,11 @@ const schema = z.object({
   professionalTitle: z.string().min(1),
   inami: z.string().trim().max(40).optional().or(z.literal("")),
   vatExempt: z.boolean(),
-  vatNumber: z.string().trim().regex(/^BE0[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}$/).optional().or(z.literal("")),
+  vatNumber: z.string().trim().optional().or(z.literal("")),
 });
 
 function OnboardingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { refresh, setActiveOrgId } = useOrg();
   const navigate = useNavigate();
@@ -50,10 +51,26 @@ function OnboardingPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ fullName, practiceName, professionalTitle, inami, vatExempt, vatNumber });
+    const cleanInami = sanitizeInami(inami);
+    const cleanVat = sanitizeVat(vatNumber);
+    const parsed = schema.safeParse({ fullName, practiceName, professionalTitle, inami: cleanInami, vatExempt, vatNumber: cleanVat });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Invalid");
       return;
+    }
+    const profDef = getProfession(parsed.data.professionalTitle);
+    if (profDef?.inamiRequired && !cleanInami) {
+      toast.error(t("onboarding:inamiRequired"));
+      return;
+    }
+    if (cleanInami && !isValidInami(cleanInami)) {
+      toast.warning(t("onboarding:inamiWarn"));
+    }
+    if (!vatExempt) {
+      if (!cleanVat || !isValidBeVat(cleanVat)) {
+        toast.error(t("onboarding:vatInvalid"));
+        return;
+      }
     }
     setLoading(true);
 
@@ -74,9 +91,9 @@ function OnboardingPage() {
         slug,
         booking_slug: slug,
         professional_title: parsed.data.professionalTitle,
-        inami_number: parsed.data.inami || null,
+        inami_number: cleanInami || null,
         vat_exempt: parsed.data.vatExempt,
-        vat_number: parsed.data.vatExempt ? null : (parsed.data.vatNumber || null),
+        vat_number: parsed.data.vatExempt ? null : (cleanVat || null),
         address_country: "BE",
         created_by: user!.id,
       })
@@ -139,20 +156,43 @@ function OnboardingPage() {
             </div>
             <div className="space-y-2">
               <Label>{t("onboarding:professionalTitle")}</Label>
-              <Select value={professionalTitle} onValueChange={setProfessionalTitle}>
+              <Select
+                value={professionalTitle}
+                onValueChange={(v) => {
+                  setProfessionalTitle(v);
+                  const def = getProfession(v);
+                  if (def) setVatExempt(def.vatExempt);
+                }}
+              >
                 <SelectTrigger><SelectValue placeholder={t("onboarding:selectTitle")} /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="kine">{t("onboarding:titleKine")}</SelectItem>
-                  <SelectItem value="osteo">{t("onboarding:titleOsteo")}</SelectItem>
-                  <SelectItem value="logo">{t("onboarding:titleLogo")}</SelectItem>
-                  <SelectItem value="psy">{t("onboarding:titlePsy")}</SelectItem>
-                  <SelectItem value="other">{t("onboarding:titleOther")}</SelectItem>
+                  {PROFESSIONS.map((p) => {
+                    const lang = (i18n.language?.slice(0, 2) as "fr" | "nl" | "en") || "fr";
+                    return (
+                      <SelectItem key={p.key} value={p.key}>
+                        {p.labels[lang] ?? p.labels.fr}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="inami">{t("onboarding:inami")}</Label>
-              <Input id="inami" value={inami} onChange={(e) => setInami(e.target.value)} placeholder={t("onboarding:inamiPh")} />
+              <Label htmlFor="inami">
+                {t("onboarding:inami")}
+                {getProfession(professionalTitle)?.inamiRequired && <span className="ml-1 text-destructive">*</span>}
+              </Label>
+              <Input
+                id="inami"
+                value={inami}
+                onChange={(e) => setInami(e.target.value)}
+                onBlur={(e) => {
+                  const c = sanitizeInami(e.target.value);
+                  setInami(c);
+                  if (c && !isValidInami(c)) toast.warning(t("onboarding:inamiWarn"));
+                }}
+                placeholder={t("onboarding:inamiPh")}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t("onboarding:vatStatus")}</Label>
@@ -170,7 +210,17 @@ function OnboardingPage() {
             {!vatExempt && (
               <div className="space-y-2">
                 <Label htmlFor="vat">{t("onboarding:vatNumber")}</Label>
-                <Input id="vat" value={vatNumber} onChange={(e) => setVatNumber(e.target.value)} placeholder={t("onboarding:vatNumberPh")} />
+                <Input
+                  id="vat"
+                  value={vatNumber}
+                  onChange={(e) => setVatNumber(e.target.value)}
+                  onBlur={(e) => {
+                    const c = sanitizeVat(e.target.value);
+                    setVatNumber(c);
+                    if (c && !isValidBeVat(c)) toast.warning(t("onboarding:vatInvalid"));
+                  }}
+                  placeholder={t("onboarding:vatNumberPh")}
+                />
               </div>
             )}
             <Button type="submit" className="w-full" size="lg" disabled={loading}>

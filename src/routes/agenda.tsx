@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useOrg } from "@/providers/OrgProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizePhone } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/agenda")({
   component: () => (
@@ -76,7 +77,7 @@ function AgendaPage() {
     const { error } = await supabase.from("appointments").insert({
       organization_id: activeOrg.id, service_id: svcId,
       patient_first_name: fn, patient_last_name: ln,
-      patient_email: em, patient_phone: ph || null,
+      patient_email: em, patient_phone: ph ? sanitizePhone(ph) : null,
       start_time: start.toISOString(), end_time: end.toISOString(),
       status: "scheduled",
     });

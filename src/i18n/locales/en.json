@@ -164,7 +164,10 @@
     "vatNormal": "VAT registered",
     "vatNumber": "VAT number",
     "vatNumberPh": "BE0123.456.789",
-    "finish": "Finish setup"
+    "finish": "Finish setup",
+    "inamiWarn": "Unusual INAMI format (8 or 11 digits expected).",
+    "inamiRequired": "INAMI number is required for this profession.",
+    "vatInvalid": "Invalid Belgian VAT number (format BE0XXXXXXXXX)."
   },
   "dashboard": {
     "today": "Today",
