@@ -156,20 +156,43 @@ function OnboardingPage() {
             </div>
             <div className="space-y-2">
               <Label>{t("onboarding:professionalTitle")}</Label>
-              <Select value={professionalTitle} onValueChange={setProfessionalTitle}>
+              <Select
+                value={professionalTitle}
+                onValueChange={(v) => {
+                  setProfessionalTitle(v);
+                  const def = getProfession(v);
+                  if (def) setVatExempt(def.vatExempt);
+                }}
+              >
                 <SelectTrigger><SelectValue placeholder={t("onboarding:selectTitle")} /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="kine">{t("onboarding:titleKine")}</SelectItem>
-                  <SelectItem value="osteo">{t("onboarding:titleOsteo")}</SelectItem>
-                  <SelectItem value="logo">{t("onboarding:titleLogo")}</SelectItem>
-                  <SelectItem value="psy">{t("onboarding:titlePsy")}</SelectItem>
-                  <SelectItem value="other">{t("onboarding:titleOther")}</SelectItem>
+                  {PROFESSIONS.map((p) => {
+                    const lang = (i18n.language?.slice(0, 2) as "fr" | "nl" | "en") || "fr";
+                    return (
+                      <SelectItem key={p.key} value={p.key}>
+                        {p.labels[lang] ?? p.labels.fr}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="inami">{t("onboarding:inami")}</Label>
-              <Input id="inami" value={inami} onChange={(e) => setInami(e.target.value)} placeholder={t("onboarding:inamiPh")} />
+              <Label htmlFor="inami">
+                {t("onboarding:inami")}
+                {getProfession(professionalTitle)?.inamiRequired && <span className="ml-1 text-destructive">*</span>}
+              </Label>
+              <Input
+                id="inami"
+                value={inami}
+                onChange={(e) => setInami(e.target.value)}
+                onBlur={(e) => {
+                  const c = sanitizeInami(e.target.value);
+                  setInami(c);
+                  if (c && !isValidInami(c)) toast.warning(t("onboarding:inamiWarn"));
+                }}
+                placeholder={t("onboarding:inamiPh")}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t("onboarding:vatStatus")}</Label>
@@ -187,7 +210,17 @@ function OnboardingPage() {
             {!vatExempt && (
               <div className="space-y-2">
                 <Label htmlFor="vat">{t("onboarding:vatNumber")}</Label>
-                <Input id="vat" value={vatNumber} onChange={(e) => setVatNumber(e.target.value)} placeholder={t("onboarding:vatNumberPh")} />
+                <Input
+                  id="vat"
+                  value={vatNumber}
+                  onChange={(e) => setVatNumber(e.target.value)}
+                  onBlur={(e) => {
+                    const c = sanitizeVat(e.target.value);
+                    setVatNumber(c);
+                    if (c && !isValidBeVat(c)) toast.warning(t("onboarding:vatInvalid"));
+                  }}
+                  placeholder={t("onboarding:vatNumberPh")}
+                />
               </div>
             )}
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
