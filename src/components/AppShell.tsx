@@ -107,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-background/80 px-4 backdrop-blur md:px-6">
           <div className="md:hidden flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-md gradient-primary text-primary-foreground">
-              <Sparkles className="h-3.5 w-3.5" />
+              <Stethoscope className="h-3.5 w-3.5" />
             </div>
             <span className="font-display text-sm font-bold">{t("appName")}</span>
           </div>
