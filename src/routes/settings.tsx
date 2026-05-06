@@ -137,7 +137,7 @@ function SettingsPage() {
               <div className="grid gap-2 rounded-lg border border-dashed border-border p-3 md:grid-cols-4">
                 <Input placeholder={t("settings:services.name")} value={newSvc.name} onChange={(e) => setNewSvc({ ...newSvc, name: e.target.value })} />
                 <Input type="number" placeholder={t("settings:services.duration")} value={newSvc.duration} onChange={(e) => setNewSvc({ ...newSvc, duration: parseInt(e.target.value) || 30 })} />
-                <Input type="number" step="0.01" placeholder={t("settings:services.price")} value={newSvc.price} onChange={(e) => setNewSvc({ ...newSvc, price: parseFloat(e.target.value) || 0 })} />
+                <Input inputMode="decimal" placeholder={t("settings:services.price")} value={newSvc.price} onChange={(e) => setNewSvc({ ...newSvc, price: e.target.value })} />
                 <Button onClick={addSvc} className="gap-1"><Plus className="h-4 w-4" />{t("settings:services.add")}</Button>
               </div>
             </CardContent>
