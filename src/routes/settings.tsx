@@ -80,7 +80,8 @@ function SettingsPage() {
   };
 
   const updateDayTime = async (id: string, field: "start_time" | "end_time", val: string) => {
-    await supabase.from("working_hours").update({ [field]: val }).eq("id", id);
+    const patch = field === "start_time" ? { start_time: val } : { end_time: val };
+    await supabase.from("working_hours").update(patch).eq("id", id);
     void load();
   };
 
