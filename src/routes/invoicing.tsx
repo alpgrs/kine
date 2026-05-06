@@ -116,10 +116,19 @@ function InvoicingPage() {
     doc.setFont("helvetica", "normal");
 
     if (inv.vat_exempt) {
-      doc.setFontSize(9); doc.setTextColor(80);
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const noticeY = pageHeight - 20;
+      doc.setDrawColor(200);
+      doc.line(20, noticeY - 6, pageWidth - 20, noticeY - 6);
+      doc.setFontSize(8);
+      doc.setTextColor(90);
+      doc.setFont("helvetica", "italic");
       const note = t("invoicing:vatExemptNotice");
-      const split = doc.splitTextToSize(note, 170);
-      doc.text(split, 20, 250);
+      const split = doc.splitTextToSize(note, pageWidth - 40);
+      doc.text(split, pageWidth / 2, noticeY, { align: "center" });
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
     }
 
     doc.save(`${inv.number}.pdf`);
