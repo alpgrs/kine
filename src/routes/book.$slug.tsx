@@ -97,7 +97,7 @@ function BookPage() {
     const { error } = await supabase.from("appointments").insert({
       organization_id: org.id, service_id: svc.id,
       patient_first_name: parsed.data.first_name, patient_last_name: parsed.data.last_name,
-      patient_email: parsed.data.email, patient_phone: cleanPhone(parsed.data.phone),
+      patient_email: parsed.data.email, patient_phone: sanitizePhone(parsed.data.phone),
       start_time: slot.toISOString(), end_time: end.toISOString(), status: "scheduled",
     });
     setLoading(false);
