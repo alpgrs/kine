@@ -51,10 +51,26 @@ function OnboardingPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ fullName, practiceName, professionalTitle, inami, vatExempt, vatNumber });
+    const cleanInami = sanitizeInami(inami);
+    const cleanVat = sanitizeVat(vatNumber);
+    const parsed = schema.safeParse({ fullName, practiceName, professionalTitle, inami: cleanInami, vatExempt, vatNumber: cleanVat });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Invalid");
       return;
+    }
+    const profDef = getProfession(parsed.data.professionalTitle);
+    if (profDef?.inamiRequired && !cleanInami) {
+      toast.error(t("onboarding:inamiRequired"));
+      return;
+    }
+    if (cleanInami && !isValidInami(cleanInami)) {
+      toast.warning(t("onboarding:inamiWarn"));
+    }
+    if (!vatExempt) {
+      if (!cleanVat || !isValidBeVat(cleanVat)) {
+        toast.error(t("onboarding:vatInvalid"));
+        return;
+      }
     }
     setLoading(true);
 
@@ -75,9 +91,9 @@ function OnboardingPage() {
         slug,
         booking_slug: slug,
         professional_title: parsed.data.professionalTitle,
-        inami_number: parsed.data.inami || null,
+        inami_number: cleanInami || null,
         vat_exempt: parsed.data.vatExempt,
-        vat_number: parsed.data.vatExempt ? null : (parsed.data.vatNumber || null),
+        vat_number: parsed.data.vatExempt ? null : (cleanVat || null),
         address_country: "BE",
         created_by: user!.id,
       })
