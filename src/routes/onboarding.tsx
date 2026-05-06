@@ -37,7 +37,7 @@ const schema = z.object({
 });
 
 function OnboardingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { refresh, setActiveOrgId } = useOrg();
   const navigate = useNavigate();
