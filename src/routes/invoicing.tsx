@@ -118,13 +118,13 @@ function InvoicingPage() {
     if (inv.vat_exempt) {
       const pageHeight = doc.internal.pageSize.getHeight();
       const pageWidth = doc.internal.pageSize.getWidth();
-      const noticeY = pageHeight - 20;
-      doc.setDrawColor(200);
-      doc.line(20, noticeY - 6, pageWidth - 20, noticeY - 6);
-      doc.setFontSize(8);
-      doc.setTextColor(90);
+      const noticeY = pageHeight - 18;
+      doc.setDrawColor(220);
+      doc.line(20, noticeY - 7, pageWidth - 20, noticeY - 7);
+      doc.setFontSize(9);
+      doc.setTextColor(130);
       doc.setFont("helvetica", "italic");
-      const note = t("invoicing:vatExemptNotice");
+      const note = "Prestation de soins de santé dispensée de TVA conformément à l'Article 44 du Code de la TVA.";
       const split = doc.splitTextToSize(note, pageWidth - 40);
       doc.text(split, pageWidth / 2, noticeY, { align: "center" });
       doc.setFont("helvetica", "normal");

@@ -40,6 +40,7 @@ function BookPage() {
   const [date, setDate] = useState<Date>(startOfDay(new Date()));
   const [slot, setSlot] = useState<Date | null>(null);
   const [form, setForm] = useState({ first_name: "", last_name: "", email: "", phone: "" });
+  const [honeypot, setHoneypot] = useState("");
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
@@ -90,14 +91,29 @@ function BookPage() {
 
   const confirm = async () => {
     if (!org || !svc || !slot) return;
+
+    // Honeypot: bot detected — fake success without persisting.
+    if (honeypot.trim() !== "") { setStep(4); return; }
+
     const parsed = patientSchema.safeParse(form);
     if (!parsed.success) { toast.error(t("booking:phoneInvalid")); return; }
     setLoading(true);
+
+    const cleanPhone = sanitizePhone(parsed.data.phone);
+    const { data: count } = await supabase.rpc("count_upcoming_bookings_for_contact", {
+      _org_id: org.id, _email: parsed.data.email, _phone: cleanPhone,
+    });
+    if (typeof count === "number" && count >= 3) {
+      setLoading(false);
+      toast.warning(t("booking:tooManyBookings"));
+      return;
+    }
+
     const end = addMinutes(slot, svc.duration_minutes);
     const { error } = await supabase.from("appointments").insert({
       organization_id: org.id, service_id: svc.id,
       patient_first_name: parsed.data.first_name, patient_last_name: parsed.data.last_name,
-      patient_email: parsed.data.email, patient_phone: sanitizePhone(parsed.data.phone),
+      patient_email: parsed.data.email, patient_phone: cleanPhone,
       start_time: slot.toISOString(), end_time: end.toISOString(), status: "scheduled",
     });
     setLoading(false);
@@ -146,13 +162,13 @@ function BookPage() {
             ) : (
               <div className="space-y-3">
                 {services.map((s) => (
-                  <button key={s.id} onClick={() => { setSvc(s); setStep(2); }} className="surface-card w-full p-4 text-left transition hover:border-primary hover:shadow-md">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-semibold">{s.name}</p>
+                  <button key={s.id} onClick={() => { setSvc(s); setStep(2); }} className="surface-card flex min-h-[64px] w-full items-center p-4 text-left transition hover:border-primary hover:shadow-md">
+                    <div className="flex w-full items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold">{s.name}</p>
                         <p className="text-xs text-muted-foreground">{s.duration_minutes} {t("minutes")}</p>
                       </div>
-                      <p className="font-semibold text-primary">{(s.price_cents / 100).toFixed(2)} €</p>
+                      <p className="shrink-0 font-semibold text-primary">{(s.price_cents / 100).toFixed(2)} €</p>
                     </div>
                   </button>
                 ))}
@@ -163,16 +179,21 @@ function BookPage() {
 
         {step === 2 && svc && (
           <div>
-            <button className="mb-3 flex items-center gap-1 text-sm text-muted-foreground" onClick={() => setStep(1)}><ChevronLeft className="h-4 w-4" />{t("back")}</button>
+            <button className="mb-3 flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground" onClick={() => setStep(1)}><ChevronLeft className="h-4 w-4" />{t("back")}</button>
             <h2 className="mb-4 font-display text-xl font-semibold">{t("booking:step2")}</h2>
-            <div className="mb-4 flex gap-2 overflow-x-auto pb-2">
+            <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0">
               {Array.from({ length: 14 }).map((_, i) => {
                 const d = addDays(startOfDay(new Date()), i);
                 const active = isSameDay2(d, date);
                 return (
-                  <button key={i} onClick={() => setDate(d)} className={`flex flex-col items-center rounded-lg border px-3 py-2 text-xs ${active ? "border-primary bg-primary/10" : "border-border"}`}>
+                  <button
+                    key={i}
+                    onClick={() => setDate(d)}
+                    className={`flex min-h-[60px] min-w-[56px] shrink-0 flex-col items-center justify-center rounded-lg border px-3 py-2 text-xs transition ${active ? "border-primary bg-primary/10" : "border-border"}`}
+                    aria-pressed={active}
+                  >
                     <span>{format(d, "EEE")}</span>
-                    <span className="font-bold">{format(d, "d")}</span>
+                    <span className="text-base font-bold">{format(d, "d")}</span>
                   </button>
                 );
               })}
@@ -182,7 +203,11 @@ function BookPage() {
             ) : (
               <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
                 {slots.map((s) => (
-                  <button key={s.toISOString()} onClick={() => { setSlot(s); setStep(3); }} className="rounded-lg border border-border py-2 text-sm font-medium transition hover:border-primary hover:bg-primary/10">
+                  <button
+                    key={s.toISOString()}
+                    onClick={() => { setSlot(s); setStep(3); }}
+                    className="flex min-h-[44px] items-center justify-center rounded-lg border border-border px-2 py-2 text-sm font-medium transition hover:border-primary hover:bg-primary/10"
+                  >
                     {format(s, "HH:mm")}
                   </button>
                 ))}
@@ -192,29 +217,47 @@ function BookPage() {
         )}
 
         {step === 3 && svc && slot && (
-          <div>
-            <button className="mb-3 flex items-center gap-1 text-sm text-muted-foreground" onClick={() => setStep(2)}><ChevronLeft className="h-4 w-4" />{t("back")}</button>
+          <div className="pb-24 md:pb-0">
+            <button className="mb-3 flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground" onClick={() => setStep(2)}><ChevronLeft className="h-4 w-4" />{t("back")}</button>
             <h2 className="mb-4 font-display text-xl font-semibold">{t("booking:step3")}</h2>
             <Card>
-              <CardContent className="space-y-3 p-6">
+              <CardContent className="space-y-3 p-4 md:p-6">
                 <div className="rounded-md bg-muted p-3 text-sm">
                   <p className="font-medium">{svc.name}</p>
                   <p className="text-xs text-muted-foreground">{format(slot, "EEEE d MMMM yyyy · HH:mm")} · {(svc.price_cents / 100).toFixed(2)} €</p>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><Label>{t("booking:yourFirstName")}</Label><Input required value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} /></div>
-                  <div><Label>{t("booking:yourLastName")}</Label><Input required value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} /></div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div><Label>{t("booking:yourFirstName")}</Label><Input className="h-11" required autoComplete="given-name" value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} /></div>
+                  <div><Label>{t("booking:yourLastName")}</Label><Input className="h-11" required autoComplete="family-name" value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} /></div>
                 </div>
-                <div><Label>{t("booking:yourEmail")}</Label><Input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+                <div><Label>{t("booking:yourEmail")}</Label><Input className="h-11" type="email" required autoComplete="email" inputMode="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
                 <div>
                   <Label>{t("booking:yourPhone")}</Label>
-                  <Input required placeholder="+32 4xx xx xx xx" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                  <Input className="h-11" required autoComplete="tel" inputMode="tel" placeholder="+32 4xx xx xx xx" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                 </div>
-                <Button className="w-full" size="lg" onClick={confirm} disabled={loading}>
+                {/* Honeypot — must remain empty */}
+                <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] -top-[9999px] h-0 w-0 overflow-hidden opacity-0">
+                  <label htmlFor="bk_website">Website</label>
+                  <input
+                    id="bk_website"
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+                <Button className="hidden h-12 w-full md:inline-flex" size="lg" onClick={confirm} disabled={loading}>
                   {loading ? t("loading") : t("booking:confirmBooking")}
                 </Button>
               </CardContent>
             </Card>
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] backdrop-blur md:hidden">
+              <Button className="h-12 w-full text-base" size="lg" onClick={confirm} disabled={loading}>
+                {loading ? t("loading") : t("booking:confirmBooking")}
+              </Button>
+            </div>
           </div>
         )}
 
@@ -233,11 +276,14 @@ function BookPage() {
               <MessageSquare className="h-4 w-4" />
               {t("booking:smsNotice")}
             </div>
-            <div className="mt-6 flex justify-center gap-2">
-              <a href={calendarLink()} target="_blank" rel="noreferrer">
-                <Button variant="outline">{t("booking:addToCalendar")}</Button>
+            <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
+              <a href={calendarLink()} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
+                <Button variant="outline" className="h-11 w-full sm:w-auto">{t("booking:addToCalendar")}</Button>
               </a>
-              <Button onClick={() => { setStep(1); setSvc(null); setSlot(null); setForm({ first_name: "", last_name: "", email: "", phone: "" }); }}>
+              <Button
+                className="h-11 w-full sm:w-auto"
+                onClick={() => { setStep(1); setSvc(null); setSlot(null); setForm({ first_name: "", last_name: "", email: "", phone: "" }); setHoneypot(""); }}
+              >
                 {t("booking:newBooking")}
               </Button>
             </div>

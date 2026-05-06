@@ -180,7 +180,10 @@
     "copyLink": "Copy link",
     "linkCopied": "Link copied!",
     "openLink": "Open",
-    "upcoming": "Upcoming appointments"
+    "upcoming": "Upcoming appointments",
+    "emptyTitle": "Your agenda is ready!",
+    "emptyDesc": "Your upcoming appointments will appear here. Share your booking link with patients to get started.",
+    "setupBookingLink": "Set up your booking link"
   },
   "agenda": {
     "title": "Agenda",
@@ -287,7 +290,8 @@
     "smsNotice": "An SMS reminder will be sent 24h before the appointment.",
     "addToCalendar": "Add to calendar",
     "newBooking": "New booking",
-    "practitionerNotFound": "Practitioner not found"
+    "practitionerNotFound": "Practitioner not found",
+    "tooManyBookings": "You've reached the maximum number of upcoming appointments. Please call us."
   },
   "notifications": {
     "title": "Notifications",

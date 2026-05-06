@@ -180,7 +180,10 @@
     "copyLink": "Copier le lien",
     "linkCopied": "Lien copié !",
     "openLink": "Ouvrir",
-    "upcoming": "Prochains rendez-vous"
+    "upcoming": "Prochains rendez-vous",
+    "emptyTitle": "Votre agenda est prêt !",
+    "emptyDesc": "Vos prochains rendez-vous apparaîtront ici. Partagez votre lien de réservation avec vos patients pour commencer.",
+    "setupBookingLink": "Configurer le lien de réservation"
   },
   "agenda": {
     "title": "Agenda",
@@ -287,7 +290,8 @@
     "smsNotice": "Un SMS de rappel vous sera envoyé 24h avant le rendez-vous.",
     "addToCalendar": "Ajouter au calendrier",
     "newBooking": "Nouvelle réservation",
-    "practitionerNotFound": "Praticien introuvable"
+    "practitionerNotFound": "Praticien introuvable",
+    "tooManyBookings": "Vous avez atteint le nombre maximum de rendez-vous à venir. Veuillez nous appeler."
   },
   "notifications": {
     "title": "Notifications",

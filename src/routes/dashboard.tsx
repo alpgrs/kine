@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Calendar, Receipt, TrendingUp, Users, Copy, ExternalLink } from "lucide-react";
+import { Calendar, Receipt, TrendingUp, Users, Copy, ExternalLink, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from "date-fns";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -33,6 +33,7 @@ function DashboardPage() {
   const [weekCount, setWeekCount] = useState(0);
   const [weekRevenue, setWeekRevenue] = useState(0);
   const [bookingSlug, setBookingSlug] = useState<string | null>(null);
+  const [upcomingCount, setUpcomingCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (!activeOrg) return;
@@ -41,7 +42,7 @@ function DashboardPage() {
       const wkStart = startOfWeek(now, { weekStartsOn: 1 });
       const wkEnd = endOfWeek(now, { weekStartsOn: 1 });
 
-      const [{ data: tdy }, { data: wk }, { data: org }] = await Promise.all([
+      const [{ data: tdy }, { data: wk }, { data: org }, { count: upcoming }] = await Promise.all([
         supabase.from("appointments").select("id,patient_first_name,patient_last_name,start_time,end_time,service_id")
           .eq("organization_id", activeOrg.id)
           .gte("start_time", startOfDay(now).toISOString())
@@ -52,10 +53,15 @@ function DashboardPage() {
           .gte("start_time", wkStart.toISOString())
           .lte("start_time", wkEnd.toISOString()),
         supabase.from("organizations").select("booking_slug").eq("id", activeOrg.id).maybeSingle(),
+        supabase.from("appointments").select("id", { count: "exact", head: true })
+          .eq("organization_id", activeOrg.id)
+          .eq("status", "scheduled")
+          .gte("start_time", now.toISOString()),
       ]);
       setToday((tdy ?? []) as Appt[]);
       setWeekCount(wk?.length ?? 0);
       setBookingSlug(org?.booking_slug ?? null);
+      setUpcomingCount(upcoming ?? 0);
 
       // Compute revenue from week appointments (completed only)
       if (wk && wk.length) {
@@ -89,44 +95,78 @@ function DashboardPage() {
         <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">{t("invoicing")}</CardTitle><Receipt className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><Link to="/invoicing"><Button variant="link" className="px-0">{t("open")}</Button></Link></CardContent></Card>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader><CardTitle>{t("dashboard:todayAppointments")}</CardTitle></CardHeader>
-          <CardContent>
-            {today.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">{t("dashboard:noAppointmentsToday")}</p>
-            ) : (
-              <ul className="space-y-2">
-                {today.map((a) => (
-                  <li key={a.id} className="flex items-center justify-between rounded-lg border border-border p-3">
-                    <div>
-                      <p className="font-medium">{a.patient_first_name} {a.patient_last_name}</p>
-                      <p className="text-xs text-muted-foreground">{format(new Date(a.start_time), "HH:mm")} – {format(new Date(a.end_time), "HH:mm")}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle className="text-base">{t("dashboard:shareLink")}</CardTitle></CardHeader>
-          <CardContent>
-            {bookingUrl ? (
-              <>
-                <p className="break-all rounded-md bg-muted p-2 text-xs">{bookingUrl}</p>
-                <div className="mt-3 flex gap-2">
-                  <Button size="sm" variant="outline" className="gap-1" onClick={copy}><Copy className="h-3 w-3" />{t("dashboard:copyLink")}</Button>
-                  <a href={bookingUrl} target="_blank" rel="noreferrer">
-                    <Button size="sm" className="gap-1"><ExternalLink className="h-3 w-3" />{t("dashboard:openLink")}</Button>
-                  </a>
+      {upcomingCount === 0 ? (
+        <div className="mt-6">
+          <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-primary/10">
+            <CardContent className="flex flex-col items-center px-6 py-12 text-center md:py-16">
+              <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Calendar className="h-8 w-8" />
+                <Sparkles className="absolute -right-2 -top-2 h-5 w-5 text-primary" />
+              </div>
+              <h2 className="font-display text-2xl font-bold md:text-3xl">{t("dashboard:emptyTitle")}</h2>
+              <p className="mt-2 max-w-md text-sm text-muted-foreground md:text-base">{t("dashboard:emptyDesc")}</p>
+              {bookingUrl ? (
+                <div className="mt-6 w-full max-w-md">
+                  <p className="break-all rounded-md border border-border bg-muted/50 p-3 text-xs">{bookingUrl}</p>
+                  <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                    <Button size="lg" className="h-11 gap-2" onClick={copy}>
+                      <Copy className="h-4 w-4" />{t("dashboard:copyLink")}
+                    </Button>
+                    <a href={bookingUrl} target="_blank" rel="noreferrer" className="sm:w-auto">
+                      <Button size="lg" variant="outline" className="h-11 w-full gap-2 sm:w-auto">
+                        <ExternalLink className="h-4 w-4" />{t("dashboard:openLink")}
+                      </Button>
+                    </a>
+                  </div>
                 </div>
-              </>
-            ) : <p className="text-sm text-muted-foreground">—</p>}
-          </CardContent>
-        </Card>
-      </div>
+              ) : (
+                <Link to="/settings" className="mt-6">
+                  <Button size="lg" className="h-11">{t("dashboard:setupBookingLink")}</Button>
+                </Link>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
+            <CardHeader><CardTitle>{t("dashboard:todayAppointments")}</CardTitle></CardHeader>
+            <CardContent>
+              {today.length === 0 ? (
+                <p className="py-8 text-center text-sm text-muted-foreground">{t("dashboard:noAppointmentsToday")}</p>
+              ) : (
+                <ul className="space-y-2">
+                  {today.map((a) => (
+                    <li key={a.id} className="flex items-center justify-between rounded-lg border border-border p-3">
+                      <div>
+                        <p className="font-medium">{a.patient_first_name} {a.patient_last_name}</p>
+                        <p className="text-xs text-muted-foreground">{format(new Date(a.start_time), "HH:mm")} – {format(new Date(a.end_time), "HH:mm")}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle className="text-base">{t("dashboard:shareLink")}</CardTitle></CardHeader>
+            <CardContent>
+              {bookingUrl ? (
+                <>
+                  <p className="break-all rounded-md bg-muted p-2 text-xs">{bookingUrl}</p>
+                  <div className="mt-3 flex gap-2">
+                    <Button size="sm" variant="outline" className="gap-1" onClick={copy}><Copy className="h-3 w-3" />{t("dashboard:copyLink")}</Button>
+                    <a href={bookingUrl} target="_blank" rel="noreferrer">
+                      <Button size="sm" className="gap-1"><ExternalLink className="h-3 w-3" />{t("dashboard:openLink")}</Button>
+                    </a>
+                  </div>
+                </>
+              ) : <p className="text-sm text-muted-foreground">—</p>}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </>
   );
 }

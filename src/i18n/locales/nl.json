@@ -180,7 +180,10 @@
     "copyLink": "Link kopiëren",
     "linkCopied": "Link gekopieerd!",
     "openLink": "Openen",
-    "upcoming": "Volgende afspraken"
+    "upcoming": "Volgende afspraken",
+    "emptyTitle": "Uw agenda is klaar!",
+    "emptyDesc": "Uw komende afspraken verschijnen hier. Deel uw boekingslink met uw patiënten om te beginnen.",
+    "setupBookingLink": "Boekingslink instellen"
   },
   "agenda": {
     "title": "Agenda",
@@ -287,7 +290,8 @@
     "smsNotice": "Een sms-herinnering wordt 24u voor de afspraak verzonden.",
     "addToCalendar": "Toevoegen aan agenda",
     "newBooking": "Nieuwe boeking",
-    "practitionerNotFound": "Zorgverlener niet gevonden"
+    "practitionerNotFound": "Zorgverlener niet gevonden",
+    "tooManyBookings": "U heeft het maximum aantal komende afspraken bereikt. Bel ons gerust."
   },
   "notifications": {
     "title": "Meldingen",
