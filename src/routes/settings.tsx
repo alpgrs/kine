@@ -110,7 +110,7 @@ function SettingsPage() {
                   <Input type="email" value={org?.public_email ?? ""} onChange={(e) => setOrg({ ...org, public_email: e.target.value })} onBlur={(e) => saveOrg({ public_email: e.target.value || null })} />
                 </div>
                 <div><Label>{t("settings:practice.publicPhone")}</Label>
-                  <Input value={org?.public_phone ?? ""} onChange={(e) => setOrg({ ...org, public_phone: e.target.value })} onBlur={(e) => saveOrg({ public_phone: e.target.value || null })} />
+                  <Input value={org?.public_phone ?? ""} onChange={(e) => setOrg({ ...org, public_phone: e.target.value })} onBlur={(e) => saveOrg({ public_phone: sanitizePhone(e.target.value) || null })} />
                 </div>
               </div>
               <div className="rounded-md bg-muted p-3 text-sm">
