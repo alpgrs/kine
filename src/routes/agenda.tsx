@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useOrg } from "@/providers/OrgProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizePhone } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/agenda")({
   component: () => (
