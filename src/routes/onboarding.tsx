@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/providers/AuthProvider";
 import { useOrg } from "@/providers/OrgProvider";
 import { RequireAuth } from "@/components/RequireAuth";
+import { PROFESSIONS, getProfession, sanitizeInami, sanitizeVat, isValidInami, isValidBeVat } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/onboarding")({
   component: () => (
@@ -32,7 +33,7 @@ const schema = z.object({
   professionalTitle: z.string().min(1),
   inami: z.string().trim().max(40).optional().or(z.literal("")),
   vatExempt: z.boolean(),
-  vatNumber: z.string().trim().regex(/^BE0[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}$/).optional().or(z.literal("")),
+  vatNumber: z.string().trim().optional().or(z.literal("")),
 });
 
 function OnboardingPage() {
