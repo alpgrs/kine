@@ -47,7 +47,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
         <div className="flex items-center gap-2 px-5 py-5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary text-primary-foreground">
-            <Sparkles className="h-4 w-4" />
+            <Stethoscope className="h-4 w-4" />
           </div>
           <span className="font-display text-lg font-bold">{t("appName")}</span>
         </div>
