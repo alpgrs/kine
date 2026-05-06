@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizePhone, isValidBePhone } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/book/$slug")({
   component: BookPage,
@@ -20,13 +21,11 @@ interface Org { id: string; name: string; professional_title: string | null; bio
 interface Svc { id: string; name: string; description: string | null; duration_minutes: number; price_cents: number; }
 interface Hour { day_of_week: number; start_time: string; end_time: string; is_active: boolean; }
 
-const phoneRegex = /^(\+32|0032|0)4\d{8}$/;
-const cleanPhone = (p: string) => p.replace(/[\s.\-]/g, "");
 const patientSchema = z.object({
   first_name: z.string().trim().min(1).max(60),
   last_name: z.string().trim().min(1).max(60),
   email: z.string().trim().email().max(150),
-  phone: z.string().refine((v) => phoneRegex.test(cleanPhone(v))),
+  phone: z.string().refine((v) => isValidBePhone(v), "Invalid BE phone"),
 });
 
 function BookPage() {
