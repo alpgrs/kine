@@ -164,7 +164,10 @@
     "vatNormal": "Btw-plichtig",
     "vatNumber": "Btw-nummer",
     "vatNumberPh": "BE0123.456.789",
-    "finish": "Configuratie afronden"
+    "finish": "Configuratie afronden",
+    "inamiWarn": "Ongebruikelijk RIZIV-formaat (8 of 11 cijfers verwacht).",
+    "inamiRequired": "RIZIV-nummer is vereist voor dit beroep.",
+    "vatInvalid": "Ongeldig Belgisch btw-nummer (formaat BE0XXXXXXXXX)."
   },
   "dashboard": {
     "today": "Vandaag",

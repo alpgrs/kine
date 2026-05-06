@@ -164,7 +164,10 @@
     "vatNormal": "Assujetti à la TVA",
     "vatNumber": "Numéro de TVA",
     "vatNumberPh": "BE0123.456.789",
-    "finish": "Terminer la configuration"
+    "finish": "Terminer la configuration",
+    "inamiWarn": "Format INAMI inhabituel (8 ou 11 chiffres attendus).",
+    "inamiRequired": "Le numéro INAMI est requis pour cette profession.",
+    "vatInvalid": "Numéro de TVA belge invalide (format BE0XXXXXXXXX)."
   },
   "dashboard": {
     "today": "Aujourd'hui",
