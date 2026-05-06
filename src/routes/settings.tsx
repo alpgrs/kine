@@ -53,14 +53,15 @@ function SettingsPage() {
   };
 
   const addSvc = async () => {
-    if (!activeOrg || !newSvc.name) return;
+    if (!activeOrg || !newSvc.name.trim()) return;
+    const cents = parsePriceToCents(newSvc.price);
     const { error } = await supabase.from("services").insert({
-      organization_id: activeOrg.id, name: newSvc.name,
-      duration_minutes: newSvc.duration, price_cents: Math.round(newSvc.price * 100),
+      organization_id: activeOrg.id, name: newSvc.name.trim(),
+      duration_minutes: newSvc.duration, price_cents: cents,
     });
     if (error) return toast.error(error.message);
     toast.success(t("settings:services.addedSuccess"));
-    setNewSvc({ name: "", duration: 30, price: 50 });
+    setNewSvc({ name: "", duration: 30, price: "50" });
     void load();
   };
 
