@@ -88,7 +88,7 @@ function AgendaPage() {
   };
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("appointments").update({ status }).eq("id", id);
+    const { error } = await supabase.from("appointments").update({ status: status as "scheduled" | "completed" | "cancelled" | "no_show" }).eq("id", id);
     if (error) return toast.error(error.message);
     void load();
   };
