@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useOrg } from "@/providers/OrgProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { parsePriceToCents, sanitizePhone } from "@/lib/be-helpers";
 
 export const Route = createFileRoute("/settings")({
   component: () => (
