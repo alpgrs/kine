@@ -230,7 +230,8 @@
     "total": "Total",
     "createdSuccess": "Invoice {{number}} created",
     "preview": "Preview",
-    "confirmAndGenerate": "Confirm and generate"
+    "confirmAndGenerate": "Confirm and generate",
+    "downloadPreview": "Download preview"
   },
   "settings": {
     "title": "Settings",

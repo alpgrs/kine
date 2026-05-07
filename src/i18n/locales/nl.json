@@ -230,7 +230,8 @@
     "total": "Totaal",
     "createdSuccess": "Factuur {{number}} aangemaakt",
     "preview": "Voorbeeld",
-    "confirmAndGenerate": "Bevestigen en aanmaken"
+    "confirmAndGenerate": "Bevestigen en aanmaken",
+    "downloadPreview": "Voorbeeld downloaden"
   },
   "settings": {
     "title": "Instellingen",

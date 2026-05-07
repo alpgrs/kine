@@ -230,7 +230,8 @@
     "total": "Total",
     "createdSuccess": "Facture {{number}} créée",
     "preview": "Aperçu",
-    "confirmAndGenerate": "Confirmer et générer"
+    "confirmAndGenerate": "Confirmer et générer",
+    "downloadPreview": "Télécharger l'aperçu"
   },
   "settings": {
     "title": "Paramètres",

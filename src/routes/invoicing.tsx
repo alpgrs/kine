@@ -39,6 +39,7 @@ function InvoicingPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewTitle, setPreviewTitle] = useState<string>("");
   const [pendingConfirm, setPendingConfirm] = useState<ApptRow | null>(null);
+  const [previewInv, setPreviewInv] = useState<Inv | null>(null);
 
   const load = async () => {
     if (!activeOrg) return;
@@ -145,16 +146,21 @@ function InvoicingPage() {
     setPreviewUrl(url.toString());
     setPreviewTitle(inv.number === "DRAFT" ? `${t("invoicing:preview")} — ${inv.patient_name}` : inv.number);
     setPendingConfirm(appt ?? null);
+    setPreviewInv(inv);
   };
 
   const closePreview = () => {
     setPreviewUrl(null);
     setPendingConfirm(null);
+    setPreviewInv(null);
   };
 
   const downloadPdf = (inv: Inv) => {
     const doc = buildPdf(inv);
-    doc.save(`${inv.number}.pdf`);
+    const safeName = inv.number === "DRAFT"
+      ? `apercu-${(inv.patient_name ?? "facture").replace(/\s+/g, "-").toLowerCase()}.pdf`
+      : `${inv.number}.pdf`;
+    doc.save(safeName);
   };
 
   const generateInvoice = async (a: ApptRow) => {
@@ -260,6 +266,11 @@ function InvoicingPage() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={closePreview}>{t("common:close")}</Button>
+            {previewInv && (
+              <Button variant="outline" className="gap-1" onClick={() => downloadPdf(previewInv)}>
+                <Download className="h-3 w-3" />{t("invoicing:downloadPreview")}
+              </Button>
+            )}
             {pendingConfirm && (
               <Button onClick={() => generateInvoice(pendingConfirm)} className="gap-1">
                 <Receipt className="h-3 w-3" />{t("invoicing:confirmAndGenerate")}
