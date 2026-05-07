@@ -263,6 +263,11 @@ function InvoicingPage() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={closePreview}>{t("common:close")}</Button>
+            {previewInv && (
+              <Button variant="outline" className="gap-1" onClick={() => downloadPdf(previewInv)}>
+                <Download className="h-3 w-3" />{t("invoicing:downloadPreview")}
+              </Button>
+            )}
             {pendingConfirm && (
               <Button onClick={() => generateInvoice(pendingConfirm)} className="gap-1">
                 <Receipt className="h-3 w-3" />{t("invoicing:confirmAndGenerate")}
