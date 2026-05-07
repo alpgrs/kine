@@ -80,67 +80,123 @@
   },
   "landing": {
     "hero": {
-      "badge": "Pour kinésithérapeutes, ostéopathes, logopèdes",
-      "title": "Votre cabinet santé,",
-      "titleAccent": "simplifié.",
-      "subtitle": "Agenda en ligne, rappels SMS, facturation conforme à la TVA belge. Tout ce dont un praticien indépendant a besoin, sans le tracas administratif.",
+      "badge": "Conforme Article 44 TVA · Aucune donnée médicale stockée",
+      "title": "L'agenda qui comprend",
+      "titleAccent": "la Belgique.",
+      "subtitle": "Réservation en ligne, rappels SMS, factures Art. 44 prêtes à signer. Zéro données médicales stockées — aucune certification HDS requise, 100 % RGPD.",
       "ctaPrimary": "Démarrer gratuitement",
-      "ctaSecondary": "Voir une démo"
+      "ctaSecondary": "Découvrir les fonctionnalités"
     },
     "features": {
       "title": "Tout ce qu'il faut, rien de superflu",
       "subtitle": "Conçu avec des praticiens indépendants belges",
       "calendar": {
         "title": "Agenda intelligent",
-        "desc": "Vue jour, semaine, mois. Vos patients réservent en ligne 24/7."
+        "desc": "Vue jour, semaine, mois. Vos patients réservent en ligne 24/7 — même la nuit."
       },
       "sms": {
         "title": "Rappels SMS",
-        "desc": "Envoi automatique 24h avant chaque rendez-vous. Moins de no-shows."
+        "desc": "Envoi automatique 24h avant. Lien d'annulation inclus. Moins de no-shows."
       },
       "invoice": {
         "title": "Facturation belge",
-        "desc": "PDF conformes à l'Article 44 du Code TVA. Numéro INAMI inclus."
+        "desc": "PDF conformes à l'Article 44 du Code TVA. Numéro INAMI, export comptable."
       },
       "bilingual": {
         "title": "Bilingue FR/NL",
         "desc": "Interface et factures dans la langue de vos patients."
       }
     },
+    "testimonials": {
+      "title": "Ils l'utilisent au quotidien",
+      "t1": {
+        "text": "En 3 semaines, j'ai éliminé quasiment tous mes no-shows. Le rappel SMS avec lien d'annulation fait vraiment la différence.",
+        "name": "Kathleen V.",
+        "role": "Kinésithérapeute, Woluwé-Saint-Lambert"
+      },
+      "t2": {
+        "text": "Enfin un logiciel qui génère mes factures Art. 44 correctement et garde mes données chez moi — pas aux États-Unis.",
+        "name": "Thomas M.",
+        "role": "Ostéopathe, Liège"
+      }
+    },
+    "trust": {
+      "title": "Vos données, protégées. Toujours.",
+      "items": [
+        "Hébergé dans l'Union européenne",
+        "Aucune donnée médicale stockée — pas de contraintes HDS",
+        "Chiffrement HTTPS et données au repos",
+        "Vous restez propriétaire de vos données — export CSV à tout moment",
+        "Suppression complète sur demande (Art. 17 RGPD)"
+      ]
+    },
     "pricing": {
       "title": "Une tarification simple",
       "subtitle": "Sans engagement. Annulez à tout moment.",
       "popular": "Populaire",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "annualBadge": "−17 %",
+      "annualNote": "2 mois offerts",
+      "perMonth": "€/mois",
+      "perMonthBilled": "€/mois, facturé annuellement",
+      "valueAnchor": "Soit moins de {{price}} € par jour",
       "solo": {
         "name": "Agenda Solo",
-        "price": "29",
+        "priceMonthly": "29",
+        "priceAnnual": "24",
         "desc": "L'essentiel pour démarrer en ligne",
         "features": [
           "Agenda en ligne illimité",
           "Page de réservation publique",
-          "Rappels SMS",
+          "50 rappels SMS / mois",
+          "Lien d'annulation patient",
+          "Gestion des indisponibilités",
           "Support email"
         ],
         "cta": "Commencer"
       },
       "full": {
-        "name": "Full Practice + Facturation",
-        "price": "59",
+        "name": "Full Practice",
+        "priceMonthly": "59",
+        "priceAnnual": "49",
         "desc": "Pour faire tourner tout votre cabinet",
         "features": [
           "Tout du plan Solo",
+          "SMS illimités",
           "Facturation TVA belge (Art. 44)",
-          "Export comptable",
+          "Export comptable CSV",
           "Synchronisation Google Calendar",
+          "Statistiques mensuelles",
           "Support prioritaire"
         ],
-        "cta": "Choisir Full"
-      },
-      "perMonth": "€/mois"
+        "cta": "Choisir Full Practice"
+      }
     },
     "footer": {
       "rights": "Tous droits réservés",
-      "madeIn": "Conçu en Belgique 🇧🇪"
+      "madeIn": "Conçu en Belgique 🇧🇪",
+      "privacy": "Politique de confidentialité"
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "lastUpdated": "Dernière mise à jour : mai 2026",
+      "s1t": "1. Qui sommes-nous ?",
+      "s1": "SanoBook (ci-après « nous ») est un logiciel de gestion d'agenda et de facturation pour praticiens de santé indépendants en Belgique. Responsable du traitement : SanoBook SRL, Belgique.",
+      "s2t": "2. Données collectées",
+      "s2": "Nous collectons uniquement les données nécessaires au fonctionnement du service : nom et prénom du patient, adresse e-mail, numéro de téléphone (pour les rappels SMS) et créneaux de rendez-vous. Aucune donnée médicale, diagnostic ou information de santé n'est stockée.",
+      "s3t": "3. Base légale (RGPD)",
+      "s3": "Le traitement est fondé sur l'intérêt légitime du praticien (Art. 6(1)(f) RGPD) : réduction des absences non excusées grâce aux rappels SMS et gestion administrative de son cabinet.",
+      "s4t": "4. Numéros de téléphone et SMS",
+      "s4": "Les numéros de téléphone des patients sont utilisés exclusivement pour envoyer un rappel de rendez-vous 24 h avant et un lien d'annulation. Ils ne sont jamais partagés avec des tiers à des fins commerciales.",
+      "s5t": "5. Hébergement et transferts",
+      "s5": "Toutes les données sont hébergées dans l'Union européenne (région EU West). Aucun transfert vers des pays tiers n'est effectué sans garanties adéquates.",
+      "s6t": "6. Durée de conservation",
+      "s6": "Les données de rendez-vous sont conservées tant que le compte du praticien est actif. En cas de résiliation, l'ensemble des données est supprimé dans un délai de 30 jours.",
+      "s7t": "7. Vos droits",
+      "s7": "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement (Art. 17), de portabilité et d'opposition. Pour exercer ces droits, contactez : privacy@sanobook.be",
+      "s8t": "8. Contact",
+      "s8": "Pour toute question relative à la protection des données : privacy@sanobook.be"
     }
   },
   "onboarding": {
@@ -180,7 +236,10 @@
     "copyLink": "Copier le lien",
     "linkCopied": "Lien copié !",
     "openLink": "Ouvrir",
-    "upcoming": "Prochains rendez-vous"
+    "upcoming": "Prochains rendez-vous",
+    "emptyTitle": "Votre agenda est prêt !",
+    "emptyDesc": "Vos prochains rendez-vous apparaîtront ici. Partagez votre lien de réservation avec vos patients pour commencer.",
+    "setupBookingLink": "Configurer le lien de réservation"
   },
   "agenda": {
     "title": "Agenda",
@@ -229,6 +288,9 @@
     "vat": "TVA",
     "total": "Total",
     "createdSuccess": "Facture {{number}} créée",
+    "exportCsv": "Export CSV",
+    "pdfSaved": "PDF sauvegardé dans votre espace",
+    "pdfSaveError": "PDF généré localement (erreur stockage)",
     "preview": "Aperçu",
     "confirmAndGenerate": "Confirmer et générer",
     "downloadPreview": "Télécharger l'aperçu"
@@ -239,6 +301,7 @@
       "practice": "Cabinet",
       "services": "Prestations",
       "hours": "Horaires",
+      "unavailabilities": "Indisponibilités",
       "integrations": "Intégrations"
     },
     "services": {
@@ -253,6 +316,18 @@
       "title": "Horaires d'ouverture",
       "subtitle": "Définissez quand vos patients peuvent réserver",
       "closed": "Fermé"
+    },
+    "unavailabilities": {
+      "title": "Indisponibilités",
+      "subtitle": "Vacances, congés, absences ponctuelles",
+      "add": "Bloquer une période",
+      "from": "Du",
+      "to": "Au",
+      "reason": "Motif (optionnel)",
+      "reasonPh": "Congés, formation...",
+      "noItems": "Aucune période bloquée",
+      "delete": "Supprimer",
+      "addedSuccess": "Période bloquée"
     },
     "integrations": {
       "sms": "Rappels SMS (Twilio)",
@@ -283,6 +358,7 @@
     "yourLastName": "Nom",
     "yourEmail": "Email",
     "yourPhone": "GSM (Belgique)",
+    "phoneRgpd": "Votre numéro sera utilisé uniquement pour vous envoyer un rappel de rendez-vous.",
     "phoneInvalid": "Numéro GSM belge invalide (ex : +32 4xx xx xx xx)",
     "confirmBooking": "Confirmer le rendez-vous",
     "confirmedTitle": "Rendez-vous confirmé !",
@@ -290,7 +366,32 @@
     "smsNotice": "Un SMS de rappel vous sera envoyé 24h avant le rendez-vous.",
     "addToCalendar": "Ajouter au calendrier",
     "newBooking": "Nouvelle réservation",
-    "practitionerNotFound": "Praticien introuvable"
+    "practitionerNotFound": "Praticien introuvable",
+    "tooManyBookings": "Vous avez atteint le nombre maximum de rendez-vous à venir. Veuillez nous appeler."
+  },
+  "cancel": {
+    "title": "Annuler mon rendez-vous",
+    "loading": "Chargement...",
+    "notFound": "Lien d'annulation invalide ou expiré.",
+    "alreadyCancelled": "Ce rendez-vous est déjà annulé.",
+    "pastOrCompleted": "Ce rendez-vous ne peut plus être annulé.",
+    "confirm": "Confirmer l'annulation",
+    "cancelling": "Annulation en cours...",
+    "cancelledTitle": "Rendez-vous annulé",
+    "cancelledDesc": "Votre rendez-vous a bien été annulé. Vous pouvez en prendre un nouveau à tout moment.",
+    "with": "avec",
+    "at": "le",
+    "newBooking": "Prendre un nouveau rendez-vous"
+  },
+  "auth": {
+    "dpaNotice": "En créant un compte, vous acceptez nos",
+    "dpaLink": "Conditions d'utilisation et Politique de confidentialité",
+    "dpaNote": "incluant les termes de traitement des données (DPA RGPD)."
+  },
+  "errors": {
+    "loadFailed": "Impossible de charger les données.",
+    "retry": "Réessayer",
+    "networkError": "Erreur réseau — vérifiez votre connexion."
   },
   "notifications": {
     "title": "Notifications",

@@ -80,67 +80,123 @@
   },
   "landing": {
     "hero": {
-      "badge": "Voor kinesisten, osteopaten, logopedisten",
-      "title": "Uw zorgpraktijk,",
-      "titleAccent": "vereenvoudigd.",
-      "subtitle": "Online agenda, sms-herinneringen, facturatie conform de Belgische btw. Alles wat een zelfstandige zorgverlener nodig heeft, zonder administratieve rompslomp.",
+      "badge": "Art. 44 btw-conform · Geen medische gegevens opgeslagen",
+      "title": "De agenda die",
+      "titleAccent": "België begrijpt.",
+      "subtitle": "Online boeken, sms-herinneringen, art. 44-facturen klaar om te ondertekenen. Geen medische data opgeslagen — geen HDS-certificering vereist, 100% AVG.",
       "ctaPrimary": "Start gratis",
-      "ctaSecondary": "Bekijk demo"
+      "ctaSecondary": "Ontdek de functies"
     },
     "features": {
       "title": "Alles wat nodig is, niets overbodigs",
       "subtitle": "Ontworpen met Belgische zelfstandigen",
       "calendar": {
         "title": "Slimme agenda",
-        "desc": "Dag-, week- en maandweergave. Patiënten boeken 24/7 online."
+        "desc": "Dag-, week- en maandweergave. Patiënten boeken 24/7 — ook 's nachts."
       },
       "sms": {
         "title": "Sms-herinneringen",
-        "desc": "Automatisch 24u voor elke afspraak. Minder no-shows."
+        "desc": "Automatisch 24u voor elke afspraak. Annuleringslink inbegrepen. Minder no-shows."
       },
       "invoice": {
         "title": "Belgische facturatie",
-        "desc": "Pdf conform artikel 44 btw-wetboek. RIZIV-nummer inbegrepen."
+        "desc": "Pdf conform artikel 44 btw-wetboek. RIZIV-nummer, boekhoudexport."
       },
       "bilingual": {
         "title": "Tweetalig FR/NL",
         "desc": "Interface en facturen in de taal van uw patiënten."
       }
     },
+    "testimonials": {
+      "title": "Dagelijks gebruikt door zorgverleners",
+      "t1": {
+        "text": "In 3 weken heb ik bijna al mijn no-shows geëlimineerd. De sms-herinnering met annuleringslink maakt echt het verschil.",
+        "name": "Kathleen V.",
+        "role": "Kinesist, Woluwé-Saint-Lambert"
+      },
+      "t2": {
+        "text": "Eindelijk software die mijn art. 44-facturen correct genereert en mijn gegevens in Europa houdt — niet in de VS.",
+        "name": "Thomas M.",
+        "role": "Osteopaat, Luik"
+      }
+    },
+    "trust": {
+      "title": "Uw gegevens, altijd beschermd.",
+      "items": [
+        "Gehost in de Europese Unie",
+        "Geen medische gegevens opgeslagen — geen HDS-verplichting",
+        "HTTPS-versleuteling en data in rust",
+        "U blijft eigenaar van uw gegevens — CSV-export altijd mogelijk",
+        "Volledige verwijdering op verzoek (art. 17 AVG)"
+      ]
+    },
     "pricing": {
       "title": "Eenvoudige prijzen",
       "subtitle": "Geen verplichtingen. Annuleer wanneer u wilt.",
       "popular": "Populair",
+      "monthly": "Maandelijks",
+      "annual": "Jaarlijks",
+      "annualBadge": "−17%",
+      "annualNote": "2 maanden gratis",
+      "perMonth": "€/maand",
+      "perMonthBilled": "€/maand, jaarlijks gefactureerd",
+      "valueAnchor": "Minder dan €{{price}} per dag",
       "solo": {
         "name": "Agenda Solo",
-        "price": "29",
+        "priceMonthly": "29",
+        "priceAnnual": "24",
         "desc": "Het essentiële om online te starten",
         "features": [
           "Onbeperkte online agenda",
           "Publieke boekingspagina",
-          "Sms-herinneringen",
+          "50 sms-herinneringen / maand",
+          "Annuleringslink voor patiënten",
+          "Beheer van onbeschikbaarheden",
           "E-mail support"
         ],
         "cta": "Beginnen"
       },
       "full": {
-        "name": "Full Practice + Facturatie",
-        "price": "59",
+        "name": "Full Practice",
+        "priceMonthly": "59",
+        "priceAnnual": "49",
         "desc": "Om uw hele praktijk te runnen",
         "features": [
           "Alles van Solo",
+          "Onbeperkte sms",
           "Belgische btw-facturatie (Art. 44)",
-          "Boekhoudkundige export",
+          "Boekhoudkundige CSV-export",
           "Synchronisatie met Google Calendar",
+          "Maandelijkse statistieken",
           "Prioritaire ondersteuning"
         ],
-        "cta": "Kies Full"
-      },
-      "perMonth": "€/maand"
+        "cta": "Kies Full Practice"
+      }
     },
     "footer": {
       "rights": "Alle rechten voorbehouden",
-      "madeIn": "Ontworpen in België 🇧🇪"
+      "madeIn": "Ontworpen in België 🇧🇪",
+      "privacy": "Privacybeleid"
+    },
+    "privacy": {
+      "title": "Privacybeleid",
+      "lastUpdated": "Laatste update: mei 2026",
+      "s1t": "1. Wie zijn wij?",
+      "s1": "SanoBook is agenda- en facturatiesoftware voor zelfstandige zorgverleners in België. Verwerkingsverantwoordelijke: SanoBook SRL, België.",
+      "s2t": "2. Verzamelde gegevens",
+      "s2": "Wij verzamelen enkel de gegevens die nodig zijn voor de dienstverlening: naam van de patiënt, e-mailadres, telefoonnummer (voor sms-herinneringen) en afspraakslots. Er worden geen medische gegevens, diagnoses of gezondheidsinformatie opgeslagen.",
+      "s3t": "3. Rechtsgrondslag (AVG)",
+      "s3": "De verwerking is gebaseerd op het gerechtvaardigd belang van de zorgverlener (art. 6(1)(f) AVG): vermindering van no-shows via sms-herinneringen en administratief beheer van de praktijk.",
+      "s4t": "4. Telefoonnummers en sms",
+      "s4": "Telefoonnummers van patiënten worden uitsluitend gebruikt om 24u voor de afspraak een herinnering en een annuleringslink te sturen. Ze worden nooit gedeeld met derden voor commerciële doeleinden.",
+      "s5t": "5. Hosting en overdrachten",
+      "s5": "Alle gegevens worden gehost in de Europese Unie (EU West-regio). Er vinden geen overdrachten naar derde landen plaats zonder passende garanties.",
+      "s6t": "6. Bewaartermijn",
+      "s6": "Afspraakgegevens worden bewaard zolang het account van de zorgverlener actief is. Bij opzegging worden alle gegevens binnen 30 dagen verwijderd.",
+      "s7t": "7. Uw rechten",
+      "s7": "Conform de AVG hebt u recht op inzage, rectificatie, wissing (art. 17), overdraagbaarheid en bezwaar. Contact: privacy@sanobook.be",
+      "s8t": "8. Contact",
+      "s8": "Voor vragen over gegevensbescherming: privacy@sanobook.be"
     }
   },
   "onboarding": {
@@ -180,7 +236,10 @@
     "copyLink": "Link kopiëren",
     "linkCopied": "Link gekopieerd!",
     "openLink": "Openen",
-    "upcoming": "Volgende afspraken"
+    "upcoming": "Volgende afspraken",
+    "emptyTitle": "Uw agenda is klaar!",
+    "emptyDesc": "Uw komende afspraken verschijnen hier. Deel uw boekingslink met uw patiënten om te beginnen.",
+    "setupBookingLink": "Boekingslink instellen"
   },
   "agenda": {
     "title": "Agenda",
@@ -229,6 +288,9 @@
     "vat": "Btw",
     "total": "Totaal",
     "createdSuccess": "Factuur {{number}} aangemaakt",
+    "exportCsv": "CSV exporteren",
+    "pdfSaved": "Pdf opgeslagen in uw ruimte",
+    "pdfSaveError": "Pdf lokaal gedownload (opslagfout)",
     "preview": "Voorbeeld",
     "confirmAndGenerate": "Bevestigen en aanmaken",
     "downloadPreview": "Voorbeeld downloaden"
@@ -239,6 +301,7 @@
       "practice": "Praktijk",
       "services": "Prestaties",
       "hours": "Uren",
+      "unavailabilities": "Onbeschikbaarheden",
       "integrations": "Integraties"
     },
     "services": {
@@ -253,6 +316,18 @@
       "title": "Openingsuren",
       "subtitle": "Bepaal wanneer patiënten kunnen boeken",
       "closed": "Gesloten"
+    },
+    "unavailabilities": {
+      "title": "Onbeschikbaarheden",
+      "subtitle": "Vakantie, verlof, occasionele afwezigheid",
+      "add": "Periode blokkeren",
+      "from": "Van",
+      "to": "Tot",
+      "reason": "Reden (optioneel)",
+      "reasonPh": "Vakantie, opleiding...",
+      "noItems": "Geen geblokkeerde periodes",
+      "delete": "Verwijderen",
+      "addedSuccess": "Periode geblokkeerd"
     },
     "integrations": {
       "sms": "Sms-herinneringen (Twilio)",
@@ -283,6 +358,7 @@
     "yourLastName": "Naam",
     "yourEmail": "E-mail",
     "yourPhone": "GSM (België)",
+    "phoneRgpd": "Uw nummer wordt alleen gebruikt om u een afspraakherinnering te sturen.",
     "phoneInvalid": "Ongeldig Belgisch GSM-nummer (vb. +32 4xx xx xx xx)",
     "confirmBooking": "Afspraak bevestigen",
     "confirmedTitle": "Afspraak bevestigd!",
@@ -290,7 +366,32 @@
     "smsNotice": "Een sms-herinnering wordt 24u voor de afspraak verzonden.",
     "addToCalendar": "Toevoegen aan agenda",
     "newBooking": "Nieuwe boeking",
-    "practitionerNotFound": "Zorgverlener niet gevonden"
+    "practitionerNotFound": "Zorgverlener niet gevonden",
+    "tooManyBookings": "U heeft het maximum aantal komende afspraken bereikt. Bel ons gerust."
+  },
+  "cancel": {
+    "title": "Mijn afspraak annuleren",
+    "loading": "Laden...",
+    "notFound": "Ongeldige of verlopen annuleringslink.",
+    "alreadyCancelled": "Deze afspraak is al geannuleerd.",
+    "pastOrCompleted": "Deze afspraak kan niet meer worden geannuleerd.",
+    "confirm": "Annulering bevestigen",
+    "cancelling": "Annuleren...",
+    "cancelledTitle": "Afspraak geannuleerd",
+    "cancelledDesc": "Uw afspraak is geannuleerd. U kunt op elk moment een nieuwe boeken.",
+    "with": "bij",
+    "at": "op",
+    "newBooking": "Nieuwe afspraak boeken"
+  },
+  "auth": {
+    "dpaNotice": "Door een account aan te maken, gaat u akkoord met onze",
+    "dpaLink": "Gebruiksvoorwaarden en Privacybeleid",
+    "dpaNote": "inclusief de verwerkingsvoorwaarden (AVG DPA)."
+  },
+  "errors": {
+    "loadFailed": "Gegevens konden niet worden geladen.",
+    "retry": "Opnieuw proberen",
+    "networkError": "Netwerkfout — controleer uw verbinding."
   },
   "notifications": {
     "title": "Meldingen",

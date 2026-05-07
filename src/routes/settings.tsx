@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, AlertCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
@@ -33,15 +33,21 @@ function SettingsPage() {
   const [smsOn, setSmsOn] = useState(false);
   const [gcalOn, setGcalOn] = useState(false);
   const [newSvc, setNewSvc] = useState<{ name: string; duration: number; price: string }>({ name: "", duration: 30, price: "50" });
+  const [unavailabilities, setUnavailabilities] = useState<any[]>([]);
+  const [newUnavail, setNewUnavail] = useState({ date_from: "", date_to: "", reason: "" });
+  const [loadError, setLoadError] = useState(false);
 
   const load = async () => {
     if (!activeOrg) return;
-    const [{ data: o }, { data: s }, { data: h }] = await Promise.all([
+    setLoadError(false);
+    const [{ data: o, error: e1 }, { data: s, error: e2 }, { data: h, error: e3 }, { data: u, error: e4 }] = await Promise.all([
       supabase.from("organizations").select("*").eq("id", activeOrg.id).maybeSingle(),
       supabase.from("services").select("*").eq("organization_id", activeOrg.id).order("sort_order"),
       supabase.from("working_hours").select("*").eq("organization_id", activeOrg.id).order("day_of_week"),
+      supabase.from("unavailabilities").select("*").eq("organization_id", activeOrg.id).order("date_from"),
     ]);
-    setOrg(o); setServices(s ?? []); setHours(h ?? []);
+    if (e1 || e2 || e3 || e4) { setLoadError(true); return; }
+    setOrg(o); setServices(s ?? []); setHours(h ?? []); setUnavailabilities(u ?? []);
   };
   useEffect(() => { void load(); /* eslint-disable-next-line */ }, [activeOrg]);
 
@@ -87,6 +93,40 @@ function SettingsPage() {
     void load();
   };
 
+  const addUnavail = async () => {
+    if (!activeOrg || !newUnavail.date_from || !newUnavail.date_to) return;
+    const { error } = await supabase.from("unavailabilities").insert({
+      organization_id: activeOrg.id,
+      date_from: newUnavail.date_from,
+      date_to: newUnavail.date_to,
+      reason: newUnavail.reason || null,
+    });
+    if (error) return toast.error(error.message);
+    toast.success(t("settings:unavailabilities.addedSuccess"));
+    setNewUnavail({ date_from: "", date_to: "", reason: "" });
+    void load();
+  };
+
+  const delUnavail = async (id: string) => {
+    await supabase.from("unavailabilities").delete().eq("id", id);
+    void load();
+  };
+
+  if (loadError) {
+    return (
+      <>
+        <PageHeader title={t("settings:title")} />
+        <div className="flex flex-col items-center gap-3 py-20 text-center">
+          <AlertCircle className="h-10 w-10 text-destructive" />
+          <p className="text-sm text-muted-foreground">{t("errors:loadFailed")}</p>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => void load()}>
+            <RefreshCw className="h-3 w-3" />{t("errors:retry")}
+          </Button>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <PageHeader title={t("settings:title")} />
@@ -95,6 +135,7 @@ function SettingsPage() {
           <TabsTrigger value="practice">{t("settings:tabs.practice")}</TabsTrigger>
           <TabsTrigger value="services">{t("settings:tabs.services")}</TabsTrigger>
           <TabsTrigger value="hours">{t("settings:tabs.hours")}</TabsTrigger>
+          <TabsTrigger value="unavailabilities">{t("settings:tabs.unavailabilities")}</TabsTrigger>
           <TabsTrigger value="integrations">{t("settings:tabs.integrations")}</TabsTrigger>
         </TabsList>
 
@@ -165,6 +206,47 @@ function SettingsPage() {
                   </div>
                 );
               })}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="unavailabilities">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("settings:unavailabilities.title")}</CardTitle>
+              <p className="text-sm text-muted-foreground">{t("settings:unavailabilities.subtitle")}</p>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {unavailabilities.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("settings:unavailabilities.noItems")}</p>
+              ) : (
+                unavailabilities.map((u) => (
+                  <div key={u.id} className="flex items-center justify-between rounded-lg border border-border p-3">
+                    <div>
+                      <p className="font-medium text-sm">{u.date_from} → {u.date_to}</p>
+                      {u.reason && <p className="text-xs text-muted-foreground">{u.reason}</p>}
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => delUnavail(u.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                  </div>
+                ))
+              )}
+              <div className="grid gap-2 rounded-lg border border-dashed border-border p-3 md:grid-cols-4">
+                <div>
+                  <Label className="text-xs">{t("settings:unavailabilities.from")}</Label>
+                  <Input type="date" value={newUnavail.date_from} onChange={(e) => setNewUnavail({ ...newUnavail, date_from: e.target.value })} />
+                </div>
+                <div>
+                  <Label className="text-xs">{t("settings:unavailabilities.to")}</Label>
+                  <Input type="date" value={newUnavail.date_to} min={newUnavail.date_from} onChange={(e) => setNewUnavail({ ...newUnavail, date_to: e.target.value })} />
+                </div>
+                <div>
+                  <Label className="text-xs">{t("settings:unavailabilities.reason")}</Label>
+                  <Input placeholder={t("settings:unavailabilities.reasonPh")} value={newUnavail.reason} onChange={(e) => setNewUnavail({ ...newUnavail, reason: e.target.value })} />
+                </div>
+                <div className="flex items-end">
+                  <Button className="w-full gap-1" onClick={addUnavail}><Plus className="h-4 w-4" />{t("settings:unavailabilities.add")}</Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

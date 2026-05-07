@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format, addDays, startOfWeek, endOfWeek, isSameDay } from "date-fns";
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, AlertCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
@@ -42,6 +42,7 @@ function AgendaPage() {
   const [appts, setAppts] = useState<Appt[]>([]);
   const [services, setServices] = useState<Svc[]>([]);
   const [open, setOpen] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   // form
   const [fn, setFn] = useState(""); const [ln, setLn] = useState("");
@@ -50,8 +51,9 @@ function AgendaPage() {
 
   const load = async () => {
     if (!activeOrg) return;
+    setLoadError(false);
     const wkEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
-    const [{ data: a }, { data: s }] = await Promise.all([
+    const [{ data: a, error: e1 }, { data: s, error: e2 }] = await Promise.all([
       supabase.from("appointments").select("*")
         .eq("organization_id", activeOrg.id)
         .gte("start_time", weekStart.toISOString())
@@ -60,6 +62,7 @@ function AgendaPage() {
       supabase.from("services").select("id,name,duration_minutes,price_cents")
         .eq("organization_id", activeOrg.id).eq("is_active", true).order("sort_order"),
     ]);
+    if (e1 || e2) { setLoadError(true); return; }
     setAppts((a ?? []) as Appt[]);
     setServices((s ?? []) as Svc[]);
   };
@@ -93,6 +96,21 @@ function AgendaPage() {
     if (error) return toast.error(error.message);
     void load();
   };
+
+  if (loadError) {
+    return (
+      <>
+        <PageHeader title={t("agenda:title")} />
+        <div className="flex flex-col items-center gap-3 py-20 text-center">
+          <AlertCircle className="h-10 w-10 text-destructive" />
+          <p className="text-sm text-muted-foreground">{t("errors:loadFailed")}</p>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => void load()}>
+            <RefreshCw className="h-3 w-3" />{t("errors:retry")}
+          </Button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
