@@ -39,6 +39,7 @@ function InvoicingPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewTitle, setPreviewTitle] = useState<string>("");
   const [pendingConfirm, setPendingConfirm] = useState<ApptRow | null>(null);
+  const [previewInv, setPreviewInv] = useState<Inv | null>(null);
 
   const load = async () => {
     if (!activeOrg) return;
