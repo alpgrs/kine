@@ -290,7 +290,10 @@
     "createdSuccess": "Factuur {{number}} aangemaakt",
     "exportCsv": "CSV exporteren",
     "pdfSaved": "Pdf opgeslagen in uw ruimte",
-    "pdfSaveError": "Pdf lokaal gedownload (opslagfout)"
+    "pdfSaveError": "Pdf lokaal gedownload (opslagfout)",
+    "preview": "Voorbeeld",
+    "confirmAndGenerate": "Bevestigen en aanmaken",
+    "downloadPreview": "Voorbeeld downloaden"
   },
   "settings": {
     "title": "Instellingen",

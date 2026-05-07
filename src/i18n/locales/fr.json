@@ -290,7 +290,10 @@
     "createdSuccess": "Facture {{number}} créée",
     "exportCsv": "Export CSV",
     "pdfSaved": "PDF sauvegardé dans votre espace",
-    "pdfSaveError": "PDF généré localement (erreur stockage)"
+    "pdfSaveError": "PDF généré localement (erreur stockage)",
+    "preview": "Aperçu",
+    "confirmAndGenerate": "Confirmer et générer",
+    "downloadPreview": "Télécharger l'aperçu"
   },
   "settings": {
     "title": "Paramètres",

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Receipt, Download, FileDown, AlertCircle, RefreshCw } from "lucide-react";
+import { Receipt, Download, Eye, FileDown, AlertCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -10,6 +10,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useOrg } from "@/providers/OrgProvider";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -36,10 +37,14 @@ function InvoicingPage() {
   const [invoices, setInvoices] = useState<Inv[]>([]);
   const [org, setOrg] = useState<any>(null);
   const [loadError, setLoadError] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewTitle, setPreviewTitle] = useState<string>("");
+  const [pendingConfirm, setPendingConfirm] = useState<ApptRow | null>(null);
+  const [previewInv, setPreviewInv] = useState<Inv | null>(null);
 
   const load = async () => {
-    setLoadError(false);
     if (!activeOrg) return;
+    setLoadError(false);
     const [{ data: orgData, error: orgErr }, { data: invs, error: invErr }] = await Promise.all([
       supabase.from("organizations").select("*").eq("id", activeOrg.id).maybeSingle(),
       supabase.from("invoices").select("*").eq("organization_id", activeOrg.id).order("issued_at", { ascending: false }),
@@ -57,28 +62,20 @@ function InvoicingPage() {
   };
   useEffect(() => { void load(); /* eslint-disable-next-line */ }, [activeOrg]);
 
-  const generateInvoice = async (a: ApptRow) => {
-    if (!activeOrg || !a.service) return;
-    const amount = a.service.price_cents;
+  const buildDraftInvoice = (a: ApptRow): Inv => {
+    const amount = a.service?.price_cents ?? 0;
     const vatExempt = !!org?.vat_exempt;
-    const vatRate = vatExempt ? 0 : 21;
-    const amountExcl = vatExempt ? amount : Math.round(amount / 1.21);
-    const vatAmount = amount - amountExcl;
-
-    const { data: numData } = await supabase.rpc("generate_invoice_number", { _org_id: activeOrg.id });
-    const number = numData as unknown as string;
-
-    const { data: inv, error } = await supabase.from("invoices").insert({
-      organization_id: activeOrg.id, number, amount, amount_excl_vat: amountExcl,
-      vat_amount: vatAmount, vat_rate: vatRate, status: "open",
+    return {
+      id: "draft",
+      number: "DRAFT",
+      amount,
+      status: "draft",
+      issued_at: new Date().toISOString(),
       patient_name: `${a.patient_first_name} ${a.patient_last_name}`,
-      patient_email: a.patient_email, vat_exempt: vatExempt, inami_number: org?.inami_number ?? null,
-      line_items: [{ appointment_id: a.id, description: a.service.name, qty: 1, unit_price_cents: amount }],
-    }).select().single();
-    if (error || !inv) return toast.error(error?.message ?? "Error");
-    toast.success(t("invoicing:createdSuccess", { number }));
-    void load();
-    downloadPdf(inv as Inv);
+      vat_exempt: vatExempt,
+      inami_number: org?.inami_number ?? null,
+      line_items: [{ appointment_id: a.id, description: a.service?.name ?? "", qty: 1, unit_price_cents: amount }],
+    };
   };
 
   const exportCsv = () => {
@@ -86,7 +83,7 @@ function InvoicingPage() {
       ["N° Facture", "Date", "Patient", "Prestation", "Montant HT (€)", "TVA (%)", "TVA (€)", "Total TTC (€)", "Statut"],
       ...invoices.map((i) => {
         const li = (i.line_items as any[])[0];
-        const exclVat = (i.amount / (1 + (i as any).vat_rate / 100) / 100).toFixed(2);
+        const exclVat = (i.amount / (1 + ((i as any).vat_rate ?? 0) / 100) / 100).toFixed(2);
         const vatAmt = (i.amount / 100 - parseFloat(exclVat)).toFixed(2);
         return [
           i.number,
@@ -109,7 +106,7 @@ function InvoicingPage() {
     a.click(); URL.revokeObjectURL(url);
   };
 
-  const downloadPdf = async (inv: Inv) => {
+  const buildPdf = (inv: Inv): jsPDF => {
     const doc = new jsPDF();
     const o = org;
     doc.setFontSize(20); doc.text(o?.name ?? "", 20, 25);
@@ -127,7 +124,6 @@ function InvoicingPage() {
     doc.setFontSize(11); doc.text(t("invoicing:patient") + ":", 20, 70);
     doc.setFontSize(10); doc.text(inv.patient_name ?? "", 20, 76);
 
-    // Table header
     doc.setFillColor(240, 240, 240); doc.rect(20, 90, 170, 8, "F");
     doc.setFontSize(10); doc.text(t("invoicing:service"), 22, 96); doc.text(t("invoicing:amount"), 170, 96);
 
@@ -141,7 +137,7 @@ function InvoicingPage() {
     y += 10;
     if (!inv.vat_exempt) {
       doc.text(`${t("invoicing:subtotal")}:`, 130, y); doc.text(`${(inv.amount / 1.21).toFixed(2)} €`, 170, y); y += 6;
-      doc.text(`${t("invoicing:vat")} 21%:`, 130, y); doc.text(`${(inv.amount - inv.amount/1.21).toFixed(2)} €`, 170, y); y += 6;
+      doc.text(`${t("invoicing:vat")} 21%:`, 130, y); doc.text(`${(inv.amount - inv.amount / 1.21).toFixed(2)} €`, 170, y); y += 6;
     }
     doc.setFontSize(12); doc.setFont("helvetica", "bold");
     doc.text(`${t("invoicing:total")}: ${(inv.amount / 100).toFixed(2)} €`, 130, y + 4);
@@ -163,8 +159,42 @@ function InvoicingPage() {
       doc.setTextColor(0);
     }
 
-    // Store PDF in Supabase storage (private invoices bucket) and update pdf_url
-    if (org?.id) {
+    if (inv.number === "DRAFT") {
+      doc.setTextColor(220, 220, 220);
+      doc.setFontSize(60);
+      doc.setFont("helvetica", "bold");
+      // @ts-ignore
+      doc.text("APERÇU", 105, 160, { align: "center", angle: 30 });
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+    }
+
+    return doc;
+  };
+
+  const openPreview = (inv: Inv, appt?: ApptRow) => {
+    const doc = buildPdf(inv);
+    const url = doc.output("bloburl") as unknown as string;
+    setPreviewUrl(url.toString());
+    setPreviewTitle(inv.number === "DRAFT" ? `${t("invoicing:preview")} — ${inv.patient_name}` : inv.number);
+    setPendingConfirm(appt ?? null);
+    setPreviewInv(inv);
+  };
+
+  const closePreview = () => {
+    setPreviewUrl(null);
+    setPendingConfirm(null);
+    setPreviewInv(null);
+  };
+
+  const downloadPdf = async (inv: Inv) => {
+    const doc = buildPdf(inv);
+    const safeName = inv.number === "DRAFT"
+      ? `apercu-${(inv.patient_name ?? "facture").replace(/\s+/g, "-").toLowerCase()}.pdf`
+      : `${inv.number}.pdf`;
+
+    // Persist the PDF in Supabase storage (only for issued invoices, not previews)
+    if (inv.number !== "DRAFT" && org?.id) {
       try {
         const pdfBuffer = doc.output("arraybuffer");
         const path = `${org.id}/${inv.number}.pdf`;
@@ -173,7 +203,6 @@ function InvoicingPage() {
         });
         if (!uploadErr) {
           await supabase.from("invoices").update({ pdf_url: path }).eq("id", inv.id);
-          toast.success(t("invoicing:pdfSaved"));
         } else {
           toast.warning(t("invoicing:pdfSaveError"));
         }
@@ -181,7 +210,32 @@ function InvoicingPage() {
         toast.warning(t("invoicing:pdfSaveError"));
       }
     }
-    doc.save(`${inv.number}.pdf`);
+    doc.save(safeName);
+  };
+
+  const generateInvoice = async (a: ApptRow) => {
+    if (!activeOrg || !a.service) return;
+    const amount = a.service.price_cents;
+    const vatExempt = !!org?.vat_exempt;
+    const vatRate = vatExempt ? 0 : 21;
+    const amountExcl = vatExempt ? amount : Math.round(amount / 1.21);
+    const vatAmount = amount - amountExcl;
+
+    const { data: numData } = await supabase.rpc("generate_invoice_number", { _org_id: activeOrg.id });
+    const number = numData as unknown as string;
+
+    const { data: inv, error } = await supabase.from("invoices").insert({
+      organization_id: activeOrg.id, number, amount, amount_excl_vat: amountExcl,
+      vat_amount: vatAmount, vat_rate: vatRate, status: "open",
+      patient_name: `${a.patient_first_name} ${a.patient_last_name}`,
+      patient_email: a.patient_email, vat_exempt: vatExempt, inami_number: org?.inami_number ?? null,
+      line_items: [{ appointment_id: a.id, description: a.service.name, qty: 1, unit_price_cents: amount }],
+    }).select().single();
+    if (error || !inv) return toast.error(error?.message ?? "Error");
+    toast.success(t("invoicing:createdSuccess", { number }));
+    closePreview();
+    void load();
+    void downloadPdf(inv as Inv);
   };
 
   if (loadError) {
@@ -215,16 +269,21 @@ function InvoicingPage() {
               ) : (
                 <ul className="divide-y divide-border">
                   {pending.map((a) => (
-                    <li key={a.id} className="flex items-center justify-between p-4">
+                    <li key={a.id} className="flex items-center justify-between gap-2 p-4">
                       <div>
                         <p className="font-medium">{a.patient_first_name} {a.patient_last_name}</p>
                         <p className="text-xs text-muted-foreground">
                           {a.service?.name} · {format(new Date(a.start_time), "dd/MM/yyyy")} · {((a.service?.price_cents ?? 0) / 100).toFixed(2)} €
                         </p>
                       </div>
-                      <Button size="sm" className="gap-1" onClick={() => generateInvoice(a)}>
-                        <Receipt className="h-3 w-3" />{t("invoicing:generateInvoice")}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => openPreview(buildDraftInvoice(a), a)}>
+                          <Eye className="h-3 w-3" />{t("invoicing:preview")}
+                        </Button>
+                        <Button size="sm" className="gap-1" onClick={() => generateInvoice(a)}>
+                          <Receipt className="h-3 w-3" />{t("invoicing:generateInvoice")}
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -248,14 +307,19 @@ function InvoicingPage() {
               ) : (
                 <ul className="divide-y divide-border">
                   {invoices.map((i) => (
-                    <li key={i.id} className="flex items-center justify-between p-4">
+                    <li key={i.id} className="flex items-center justify-between gap-2 p-4">
                       <div>
                         <p className="font-medium">{i.number}</p>
                         <p className="text-xs text-muted-foreground">{i.patient_name} · {format(new Date(i.issued_at), "dd/MM/yyyy")} · {(i.amount / 100).toFixed(2)} €</p>
                       </div>
-                      <Button size="sm" variant="outline" className="gap-1" onClick={() => void downloadPdf(i)}>
-                        <Download className="h-3 w-3" />PDF
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => openPreview(i)}>
+                          <Eye className="h-3 w-3" />{t("invoicing:preview")}
+                        </Button>
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => void downloadPdf(i)}>
+                          <Download className="h-3 w-3" />PDF
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -264,6 +328,30 @@ function InvoicingPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={!!previewUrl} onOpenChange={(o) => !o && closePreview()}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{previewTitle}</DialogTitle>
+          </DialogHeader>
+          {previewUrl && (
+            <iframe src={previewUrl} className="h-[70vh] w-full rounded border" title="PDF preview" />
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={closePreview}>{t("common:close")}</Button>
+            {previewInv && (
+              <Button variant="outline" className="gap-1" onClick={() => void downloadPdf(previewInv)}>
+                <Download className="h-3 w-3" />{t("invoicing:downloadPreview")}
+              </Button>
+            )}
+            {pendingConfirm && (
+              <Button onClick={() => generateInvoice(pendingConfirm)} className="gap-1">
+                <Receipt className="h-3 w-3" />{t("invoicing:confirmAndGenerate")}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

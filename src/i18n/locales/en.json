@@ -290,7 +290,10 @@
     "createdSuccess": "Invoice {{number}} created",
     "exportCsv": "Export CSV",
     "pdfSaved": "PDF saved to your storage",
-    "pdfSaveError": "PDF downloaded locally (storage error)"
+    "pdfSaveError": "PDF downloaded locally (storage error)",
+    "preview": "Preview",
+    "confirmAndGenerate": "Confirm and generate",
+    "downloadPreview": "Download preview"
   },
   "settings": {
     "title": "Settings",
