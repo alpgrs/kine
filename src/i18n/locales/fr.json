@@ -393,6 +393,61 @@
     "retry": "Réessayer",
     "networkError": "Erreur réseau — vérifiez votre connexion."
   },
+  "admin": {
+    "title": "Espace Admin",
+    "subtitle": "Vue plateforme — toutes les organisations, tous les praticiens.",
+    "refresh": "Actualiser",
+    "promoted": "Utilisateur promu super admin",
+    "demoted": "Privilèges super admin retirés",
+    "cannotDemoteSelf": "Vous ne pouvez pas vous retirer vos propres droits.",
+    "orgDeleted": "Organisation supprimée",
+    "deleteOrgConfirm": "Supprimer définitivement l'organisation « {{name}} » ? Toutes les données associées seront effacées (rendez-vous, factures, prestations, abonnement).",
+    "stats": {
+      "orgs": "Organisations",
+      "orgsHint": "{{count}} créées sur 30 j",
+      "users": "Utilisateurs",
+      "appointments": "RDV total",
+      "last30d": "{{count}} sur 30 j",
+      "upcoming": "RDV à venir",
+      "invoices": "Factures",
+      "revenue": "Revenu cumulé",
+      "subsActive": "Abonnements actifs",
+      "subsPastDue": "Paiements en retard"
+    },
+    "tabs": {
+      "orgs": "Organisations",
+      "users": "Utilisateurs"
+    },
+    "orgs": {
+      "title": "Organisations",
+      "searchPh": "Rechercher (nom, slug, INAMI)…",
+      "empty": "Aucune organisation",
+      "name": "Nom",
+      "specialty": "Spécialité",
+      "members": "Membres",
+      "invoices": "Factures",
+      "revenue": "Revenu",
+      "sub": "Abonnement",
+      "created": "Créée",
+      "actions": "Actions",
+      "openBooking": "Ouvrir la page de réservation",
+      "delete": "Supprimer"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "searchPh": "Rechercher (email, nom)…",
+      "empty": "Aucun utilisateur",
+      "name": "Nom",
+      "lang": "Langue",
+      "orgCount": "Cabinets",
+      "role": "Rôle",
+      "user": "Utilisateur",
+      "created": "Créé",
+      "actions": "Actions",
+      "promote": "Promouvoir",
+      "demote": "Retirer"
+    }
+  },
   "notifications": {
     "title": "Notifications",
     "empty": "Aucune notification",

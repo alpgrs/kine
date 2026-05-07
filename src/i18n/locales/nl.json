@@ -393,6 +393,61 @@
     "retry": "Opnieuw proberen",
     "networkError": "Netwerkfout — controleer uw verbinding."
   },
+  "admin": {
+    "title": "Admin-console",
+    "subtitle": "Platformoverzicht — alle praktijken en zorgverleners.",
+    "refresh": "Vernieuwen",
+    "promoted": "Gebruiker bevorderd tot super admin",
+    "demoted": "Super-admin-rechten ingetrokken",
+    "cannotDemoteSelf": "U kunt uw eigen super-admin-rechten niet intrekken.",
+    "orgDeleted": "Praktijk verwijderd",
+    "deleteOrgConfirm": "Praktijk \"{{name}}\" definitief verwijderen? Alle gekoppelde gegevens worden gewist (afspraken, facturen, prestaties, abonnement).",
+    "stats": {
+      "orgs": "Praktijken",
+      "orgsHint": "{{count}} aangemaakt in 30 d",
+      "users": "Gebruikers",
+      "appointments": "Totaal afspraken",
+      "last30d": "{{count}} in 30 d",
+      "upcoming": "Komend",
+      "invoices": "Facturen",
+      "revenue": "Totale omzet",
+      "subsActive": "Actieve abonnementen",
+      "subsPastDue": "Achterstallige betalingen"
+    },
+    "tabs": {
+      "orgs": "Praktijken",
+      "users": "Gebruikers"
+    },
+    "orgs": {
+      "title": "Praktijken",
+      "searchPh": "Zoeken (naam, slug, RIZIV)…",
+      "empty": "Geen praktijken",
+      "name": "Naam",
+      "specialty": "Specialiteit",
+      "members": "Leden",
+      "invoices": "Facturen",
+      "revenue": "Omzet",
+      "sub": "Abonnement",
+      "created": "Aangemaakt",
+      "actions": "Acties",
+      "openBooking": "Boekingspagina openen",
+      "delete": "Verwijderen"
+    },
+    "users": {
+      "title": "Gebruikers",
+      "searchPh": "Zoeken (e-mail, naam)…",
+      "empty": "Geen gebruikers",
+      "name": "Naam",
+      "lang": "Taal",
+      "orgCount": "Praktijken",
+      "role": "Rol",
+      "user": "Gebruiker",
+      "created": "Aangemaakt",
+      "actions": "Acties",
+      "promote": "Bevorderen",
+      "demote": "Intrekken"
+    }
+  },
   "notifications": {
     "title": "Meldingen",
     "empty": "Geen meldingen",

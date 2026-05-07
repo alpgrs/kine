@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { AdminProvider } from "@/providers/AdminProvider";
 import { OrgProvider } from "@/providers/OrgProvider";
 import { I18nSync } from "@/providers/I18nSync";
 import appCss from "../styles.css?url";
@@ -79,11 +80,13 @@ function RootComponent() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <AuthProvider>
-        <OrgProvider>
-          <I18nSync />
-          <Outlet />
-          <Toaster position="top-right" richColors />
-        </OrgProvider>
+        <AdminProvider>
+          <OrgProvider>
+            <I18nSync />
+            <Outlet />
+            <Toaster position="top-right" richColors />
+          </OrgProvider>
+        </AdminProvider>
       </AuthProvider>
     </ThemeProvider>
   );

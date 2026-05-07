@@ -9,6 +9,7 @@ import {
   Receipt,
   LogOut,
   Stethoscope,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { OrgSwitcher } from "./OrgSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/providers/AuthProvider";
+import { useAdmin } from "@/providers/AdminProvider";
 import { NotificationsBell } from "./NotificationsBell";
 
 interface NavItem {
@@ -38,6 +40,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { isSuperAdmin } = useAdmin();
 
   const initials = (user?.email ?? "?").slice(0, 2).toUpperCase();
 
@@ -76,6 +79,24 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
+
+          {isSuperAdmin && (
+            <>
+              <div className="my-3 border-t border-sidebar-border/60" />
+              <Link
+                to="/admin"
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  location.pathname.startsWith("/admin")
+                    ? "bg-primary/15 text-primary"
+                    : "text-sidebar-foreground hover:bg-primary/10 hover:text-primary"
+                )}
+              >
+                <Sparkles className="h-4 w-4" />
+                {t("admin:title")}
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="border-t border-sidebar-border p-3">
@@ -148,7 +169,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function PageHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
+export function PageHeader({ title, description, actions }: { title: ReactNode; description?: string; actions?: ReactNode }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>

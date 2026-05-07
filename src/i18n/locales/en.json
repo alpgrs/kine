@@ -393,6 +393,61 @@
     "retry": "Retry",
     "networkError": "Network error — please check your connection."
   },
+  "admin": {
+    "title": "Admin Console",
+    "subtitle": "Platform-wide view — all organizations, all practitioners.",
+    "refresh": "Refresh",
+    "promoted": "User promoted to super admin",
+    "demoted": "Super admin privileges removed",
+    "cannotDemoteSelf": "You cannot remove your own super admin rights.",
+    "orgDeleted": "Organization deleted",
+    "deleteOrgConfirm": "Permanently delete organization \"{{name}}\"? All associated data will be erased (appointments, invoices, services, subscription).",
+    "stats": {
+      "orgs": "Organizations",
+      "orgsHint": "{{count}} created in 30d",
+      "users": "Users",
+      "appointments": "Total appointments",
+      "last30d": "{{count}} in last 30d",
+      "upcoming": "Upcoming",
+      "invoices": "Invoices",
+      "revenue": "Total revenue",
+      "subsActive": "Active subscriptions",
+      "subsPastDue": "Past-due payments"
+    },
+    "tabs": {
+      "orgs": "Organizations",
+      "users": "Users"
+    },
+    "orgs": {
+      "title": "Organizations",
+      "searchPh": "Search (name, slug, INAMI)…",
+      "empty": "No organizations",
+      "name": "Name",
+      "specialty": "Specialty",
+      "members": "Members",
+      "invoices": "Invoices",
+      "revenue": "Revenue",
+      "sub": "Subscription",
+      "created": "Created",
+      "actions": "Actions",
+      "openBooking": "Open booking page",
+      "delete": "Delete"
+    },
+    "users": {
+      "title": "Users",
+      "searchPh": "Search (email, name)…",
+      "empty": "No users",
+      "name": "Name",
+      "lang": "Lang",
+      "orgCount": "Practices",
+      "role": "Role",
+      "user": "User",
+      "created": "Created",
+      "actions": "Actions",
+      "promote": "Promote",
+      "demote": "Demote"
+    }
+  },
   "notifications": {
     "title": "Notifications",
     "empty": "No notifications",
