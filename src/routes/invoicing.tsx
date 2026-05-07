@@ -157,7 +157,10 @@ function InvoicingPage() {
 
   const downloadPdf = (inv: Inv) => {
     const doc = buildPdf(inv);
-    doc.save(`${inv.number}.pdf`);
+    const safeName = inv.number === "DRAFT"
+      ? `apercu-${(inv.patient_name ?? "facture").replace(/\s+/g, "-").toLowerCase()}.pdf`
+      : `${inv.number}.pdf`;
+    doc.save(safeName);
   };
 
   const generateInvoice = async (a: ApptRow) => {
