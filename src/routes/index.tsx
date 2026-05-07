@@ -58,7 +58,7 @@ function Index() {
             className="pointer-events-none absolute inset-0 -z-10 opacity-40"
             style={{
               background:
-                "radial-gradient(60rem 40rem at 70% -10%, color-mix(in oklab, var(--primary) 35%, transparent), transparent), radial-gradient(40rem 30rem at -10% 30%, color-mix(in oklab, var(--accent) 25%, transparent), transparent)",
+                "radial-gradient(60rem 40rem at 70% -10%, color-mix(in oklab, var(--primary) 35%, transparent), transparent), radial-gradient(40rem 30rem at -10% 30%, color-mix(in oklab, var(--primary-glow) 28%, transparent), transparent)",
             }}
           />
           <div className="mx-auto max-w-4xl text-center">

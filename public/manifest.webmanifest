@@ -1,12 +1,12 @@
 {
-  "name": "SaaS Core",
-  "short_name": "SaaS Core",
-  "description": "Plateforme SaaS multitenant pour le marché belge",
+  "name": "SanoBook",
+  "short_name": "SanoBook",
+  "description": "Agenda & facturation pour praticiens de santé belges",
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1f5fa8",
+  "theme_color": "#1d4ed8",
   "lang": "fr",
   "icons": [
     { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
