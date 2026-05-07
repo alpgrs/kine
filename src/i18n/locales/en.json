@@ -228,7 +228,9 @@
     "subtotal": "Subtotal",
     "vat": "VAT",
     "total": "Total",
-    "createdSuccess": "Invoice {{number}} created"
+    "createdSuccess": "Invoice {{number}} created",
+    "preview": "Preview",
+    "confirmAndGenerate": "Confirm and generate"
   },
   "settings": {
     "title": "Settings",
