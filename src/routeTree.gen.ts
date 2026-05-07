@@ -10,11 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as CancelTokenRouteImport } from './routes/cancel.$token'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OfflineRouteImport } from './routes/offline'
@@ -25,7 +23,9 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BillingRouteImport } from './routes/billing'
 import { Route as AgendaRouteImport } from './routes/agenda'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CancelTokenRouteImport } from './routes/cancel.$token'
 import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as AccountTeamRouteImport } from './routes/account.team'
 import { Route as AccountProfileRouteImport } from './routes/account.profile'
@@ -36,21 +36,6 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CancelTokenRoute = CancelTokenRouteImport.update({
-  id: '/cancel/$token',
-  path: '/cancel/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -59,6 +44,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PatientsRoute = PatientsRouteImport.update({
@@ -111,9 +101,19 @@ const AgendaRoute = AgendaRouteImport.update({
   path: '/agenda',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CancelTokenRoute = CancelTokenRouteImport.update({
+  id: '/cancel/$token',
+  path: '/cancel/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookSlugRoute = BookSlugRouteImport.update({
@@ -142,7 +142,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
-  '/cancel/$token': typeof CancelTokenRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
@@ -159,13 +158,13 @@ export interface FileRoutesByFullPath {
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
   '/book/$slug': typeof BookSlugRoute
+  '/cancel/$token': typeof CancelTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
-  '/cancel/$token': typeof CancelTokenRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
@@ -182,6 +181,7 @@ export interface FileRoutesByTo {
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
   '/book/$slug': typeof BookSlugRoute
+  '/cancel/$token': typeof CancelTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -189,7 +189,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/billing': typeof BillingRoute
-  '/cancel/$token': typeof CancelTokenRoute
   '/dashboard': typeof DashboardRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/invite': typeof InviteRoute
@@ -206,6 +205,7 @@ export interface FileRoutesById {
   '/account/profile': typeof AccountProfileRoute
   '/account/team': typeof AccountTeamRoute
   '/book/$slug': typeof BookSlugRoute
+  '/cancel/$token': typeof CancelTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -214,7 +214,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/billing'
-    | '/cancel/$token'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
@@ -231,13 +230,13 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/team'
     | '/book/$slug'
+    | '/cancel/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/agenda'
     | '/billing'
-    | '/cancel/$token'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
@@ -254,13 +253,13 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/team'
     | '/book/$slug'
+    | '/cancel/$token'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/agenda'
     | '/billing'
-    | '/cancel/$token'
     | '/dashboard'
     | '/forgot-password'
     | '/invite'
@@ -277,6 +276,7 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/team'
     | '/book/$slug'
+    | '/cancel/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -284,7 +284,6 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AgendaRoute: typeof AgendaRoute
   BillingRoute: typeof BillingRoute
-  CancelTokenRoute: typeof CancelTokenRoute
   DashboardRoute: typeof DashboardRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   InviteRoute: typeof InviteRoute
@@ -301,6 +300,7 @@ export interface RootRouteChildren {
   AccountProfileRoute: typeof AccountProfileRoute
   AccountTeamRoute: typeof AccountTeamRoute
   BookSlugRoute: typeof BookSlugRoute
+  CancelTokenRoute: typeof CancelTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -324,6 +324,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/patients': {
@@ -396,25 +403,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgendaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/book/$slug': {
-      id: '/book/$slug'
-      path: '/book/$slug'
-      fullPath: '/book/$slug'
-      preLoaderRoute: typeof BookSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cancel/$token': {
@@ -424,11 +424,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CancelTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/book/$slug': {
+      id: '/book/$slug'
+      path: '/book/$slug'
+      fullPath: '/book/$slug'
+      preLoaderRoute: typeof BookSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/team': {
@@ -460,7 +460,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AgendaRoute: AgendaRoute,
   BillingRoute: BillingRoute,
-  CancelTokenRoute: CancelTokenRoute,
   DashboardRoute: DashboardRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   InviteRoute: InviteRoute,
@@ -477,7 +476,17 @@ const rootRouteChildren: RootRouteChildren = {
   AccountProfileRoute: AccountProfileRoute,
   AccountTeamRoute: AccountTeamRoute,
   BookSlugRoute: BookSlugRoute,
+  CancelTokenRoute: CancelTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
