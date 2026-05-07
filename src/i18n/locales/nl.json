@@ -228,7 +228,9 @@
     "subtotal": "Subtotaal",
     "vat": "Btw",
     "total": "Totaal",
-    "createdSuccess": "Factuur {{number}} aangemaakt"
+    "createdSuccess": "Factuur {{number}} aangemaakt",
+    "preview": "Voorbeeld",
+    "confirmAndGenerate": "Bevestigen en aanmaken"
   },
   "settings": {
     "title": "Instellingen",
