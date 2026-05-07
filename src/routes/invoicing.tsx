@@ -146,11 +146,13 @@ function InvoicingPage() {
     setPreviewUrl(url.toString());
     setPreviewTitle(inv.number === "DRAFT" ? `${t("invoicing:preview")} — ${inv.patient_name}` : inv.number);
     setPendingConfirm(appt ?? null);
+    setPreviewInv(inv);
   };
 
   const closePreview = () => {
     setPreviewUrl(null);
     setPendingConfirm(null);
+    setPreviewInv(null);
   };
 
   const downloadPdf = (inv: Inv) => {
