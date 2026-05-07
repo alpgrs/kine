@@ -80,67 +80,123 @@
   },
   "landing": {
     "hero": {
-      "badge": "For physiotherapists, osteopaths, speech therapists",
-      "title": "Your healthcare practice,",
-      "titleAccent": "simplified.",
-      "subtitle": "Online calendar, SMS reminders, Belgian VAT-compliant invoicing. Everything an independent practitioner needs, without the admin hassle.",
+      "badge": "Art. 44 VAT compliant · No medical data stored",
+      "title": "The scheduling app that",
+      "titleAccent": "gets Belgium.",
+      "subtitle": "Online booking, SMS reminders, Art. 44 invoices ready to sign. Zero medical data stored — no HDS certification required, 100% GDPR.",
       "ctaPrimary": "Start free",
-      "ctaSecondary": "See demo"
+      "ctaSecondary": "Explore features"
     },
     "features": {
       "title": "Everything you need, nothing you don't",
       "subtitle": "Built with Belgian independent practitioners",
       "calendar": {
         "title": "Smart calendar",
-        "desc": "Day, week, month views. Patients book online 24/7."
+        "desc": "Day, week, month views. Patients book online 24/7 — even at night."
       },
       "sms": {
         "title": "SMS reminders",
-        "desc": "Auto-sent 24h before each appointment. Fewer no-shows."
+        "desc": "Auto-sent 24h before. Cancellation link included. Fewer no-shows."
       },
       "invoice": {
         "title": "Belgian invoicing",
-        "desc": "PDFs compliant with Article 44 of the VAT Code. INAMI included."
+        "desc": "PDFs compliant with Article 44 VAT Code. INAMI number, accounting export."
       },
       "bilingual": {
         "title": "Bilingual FR/NL",
         "desc": "UI and invoices in your patients' language."
       }
     },
+    "testimonials": {
+      "title": "Used daily by practitioners",
+      "t1": {
+        "text": "In 3 weeks, I've eliminated almost all my no-shows. The SMS reminder with cancellation link really makes the difference.",
+        "name": "Kathleen V.",
+        "role": "Physiotherapist, Woluwe-Saint-Lambert"
+      },
+      "t2": {
+        "text": "Finally a software that generates my Art. 44 invoices correctly and keeps my data in Europe — not the US.",
+        "name": "Thomas M.",
+        "role": "Osteopath, Liège"
+      }
+    },
+    "trust": {
+      "title": "Your data, protected. Always.",
+      "items": [
+        "Hosted in the European Union",
+        "No medical data stored — no HDS constraints",
+        "HTTPS encryption and data at rest",
+        "You own your data — CSV export anytime",
+        "Complete deletion on request (Art. 17 GDPR)"
+      ]
+    },
     "pricing": {
       "title": "Simple pricing",
       "subtitle": "No commitment. Cancel anytime.",
       "popular": "Popular",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "annualBadge": "−17%",
+      "annualNote": "2 months free",
+      "perMonth": "€/month",
+      "perMonthBilled": "€/month, billed annually",
+      "valueAnchor": "Less than €{{price}} per day",
       "solo": {
         "name": "Agenda Solo",
-        "price": "29",
-        "desc": "The essentials to start online",
+        "priceMonthly": "29",
+        "priceAnnual": "24",
+        "desc": "The essentials to get online",
         "features": [
           "Unlimited online calendar",
           "Public booking page",
-          "SMS reminders",
+          "50 SMS reminders / month",
+          "Patient cancellation link",
+          "Unavailability management",
           "Email support"
         ],
         "cta": "Get started"
       },
       "full": {
-        "name": "Full Practice + Invoicing",
-        "price": "59",
+        "name": "Full Practice",
+        "priceMonthly": "59",
+        "priceAnnual": "49",
         "desc": "Run your entire practice",
         "features": [
           "Everything in Solo",
+          "Unlimited SMS",
           "Belgian VAT invoicing (Art. 44)",
-          "Accounting export",
+          "Accounting CSV export",
           "Google Calendar sync",
+          "Monthly statistics",
           "Priority support"
         ],
-        "cta": "Choose Full"
-      },
-      "perMonth": "€/month"
+        "cta": "Choose Full Practice"
+      }
     },
     "footer": {
       "rights": "All rights reserved",
-      "madeIn": "Made in Belgium 🇧🇪"
+      "madeIn": "Made in Belgium 🇧🇪",
+      "privacy": "Privacy policy"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: May 2026",
+      "s1t": "1. Who are we?",
+      "s1": "SanoBook is scheduling and invoicing software for independent healthcare practitioners in Belgium. Data controller: SanoBook SRL, Belgium.",
+      "s2t": "2. Data collected",
+      "s2": "We collect only the data necessary to operate the service: patient name, email address, phone number (for SMS reminders) and appointment slots. No medical data, diagnosis or health information is stored.",
+      "s3t": "3. Legal basis (GDPR)",
+      "s3": "Processing is based on the legitimate interest of the practitioner (Art. 6(1)(f) GDPR): reducing no-shows via SMS reminders and administrative management of their practice.",
+      "s4t": "4. Phone numbers and SMS",
+      "s4": "Patient phone numbers are used exclusively to send an appointment reminder 24h before and a cancellation link. They are never shared with third parties for commercial purposes.",
+      "s5t": "5. Hosting and transfers",
+      "s5": "All data is hosted in the European Union (EU West region). No transfers to third countries are made without adequate guarantees.",
+      "s6t": "6. Retention period",
+      "s6": "Appointment data is retained as long as the practitioner account is active. On termination, all data is deleted within 30 days.",
+      "s7t": "7. Your rights",
+      "s7": "Under GDPR you have the right of access, rectification, erasure (Art. 17), portability and objection. Contact: privacy@sanobook.be",
+      "s8t": "8. Contact",
+      "s8": "For any data protection queries: privacy@sanobook.be"
     }
   },
   "onboarding": {
@@ -231,7 +287,10 @@
     "subtotal": "Subtotal",
     "vat": "VAT",
     "total": "Total",
-    "createdSuccess": "Invoice {{number}} created"
+    "createdSuccess": "Invoice {{number}} created",
+    "exportCsv": "Export CSV",
+    "pdfSaved": "PDF saved to your storage",
+    "pdfSaveError": "PDF downloaded locally (storage error)"
   },
   "settings": {
     "title": "Settings",
@@ -239,6 +298,7 @@
       "practice": "Practice",
       "services": "Services",
       "hours": "Hours",
+      "unavailabilities": "Unavailabilities",
       "integrations": "Integrations"
     },
     "services": {
@@ -253,6 +313,18 @@
       "title": "Opening hours",
       "subtitle": "Set when patients can book",
       "closed": "Closed"
+    },
+    "unavailabilities": {
+      "title": "Unavailabilities",
+      "subtitle": "Holidays, leave, occasional absences",
+      "add": "Block a period",
+      "from": "From",
+      "to": "To",
+      "reason": "Reason (optional)",
+      "reasonPh": "Holiday, training...",
+      "noItems": "No blocked periods",
+      "delete": "Delete",
+      "addedSuccess": "Period blocked"
     },
     "integrations": {
       "sms": "SMS reminders (Twilio)",
@@ -283,6 +355,7 @@
     "yourLastName": "Last name",
     "yourEmail": "Email",
     "yourPhone": "Mobile (Belgium)",
+    "phoneRgpd": "Your number will be used only to send you an appointment reminder.",
     "phoneInvalid": "Invalid Belgian mobile number (e.g. +32 4xx xx xx xx)",
     "confirmBooking": "Confirm appointment",
     "confirmedTitle": "Appointment confirmed!",
@@ -292,6 +365,30 @@
     "newBooking": "New booking",
     "practitionerNotFound": "Practitioner not found",
     "tooManyBookings": "You've reached the maximum number of upcoming appointments. Please call us."
+  },
+  "cancel": {
+    "title": "Cancel my appointment",
+    "loading": "Loading...",
+    "notFound": "Invalid or expired cancellation link.",
+    "alreadyCancelled": "This appointment is already cancelled.",
+    "pastOrCompleted": "This appointment can no longer be cancelled.",
+    "confirm": "Confirm cancellation",
+    "cancelling": "Cancelling...",
+    "cancelledTitle": "Appointment cancelled",
+    "cancelledDesc": "Your appointment has been cancelled. You can book a new one at any time.",
+    "with": "with",
+    "at": "on",
+    "newBooking": "Book a new appointment"
+  },
+  "auth": {
+    "dpaNotice": "By creating an account, you agree to our",
+    "dpaLink": "Terms of use and Privacy policy",
+    "dpaNote": "including the data processing terms (GDPR DPA)."
+  },
+  "errors": {
+    "loadFailed": "Unable to load data.",
+    "retry": "Retry",
+    "networkError": "Network error — please check your connection."
   },
   "notifications": {
     "title": "Notifications",

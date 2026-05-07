@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Calendar, Receipt, TrendingUp, Users, Copy, ExternalLink, Sparkles } from "lucide-react";
+import { Calendar, Receipt, TrendingUp, Users, Copy, ExternalLink, Sparkles, AlertCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from "date-fns";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -34,6 +34,7 @@ function DashboardPage() {
   const [weekRevenue, setWeekRevenue] = useState(0);
   const [bookingSlug, setBookingSlug] = useState<string | null>(null);
   const [upcomingCount, setUpcomingCount] = useState<number | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     if (!activeOrg) return;
@@ -42,7 +43,9 @@ function DashboardPage() {
       const wkStart = startOfWeek(now, { weekStartsOn: 1 });
       const wkEnd = endOfWeek(now, { weekStartsOn: 1 });
 
-      const [{ data: tdy }, { data: wk }, { data: org }, { count: upcoming }] = await Promise.all([
+      const [
+        { data: tdy, error: e1 }, { data: wk, error: e2 }, { data: org, error: e3 }, { count: upcoming, error: e4 }
+      ] = await Promise.all([
         supabase.from("appointments").select("id,patient_first_name,patient_last_name,start_time,end_time,service_id")
           .eq("organization_id", activeOrg.id)
           .gte("start_time", startOfDay(now).toISOString())
@@ -58,6 +61,7 @@ function DashboardPage() {
           .eq("status", "scheduled")
           .gte("start_time", now.toISOString()),
       ]);
+      if (e1 || e2 || e3 || e4) { setLoadError(true); return; }
       setToday((tdy ?? []) as Appt[]);
       setWeekCount(wk?.length ?? 0);
       setBookingSlug(org?.booking_slug ?? null);
@@ -83,6 +87,21 @@ function DashboardPage() {
     void navigator.clipboard.writeText(bookingUrl);
     toast.success(t("dashboard:linkCopied"));
   };
+
+  if (loadError) {
+    return (
+      <>
+        <PageHeader title={t("dashboard")} />
+        <div className="flex flex-col items-center gap-3 py-20 text-center">
+          <AlertCircle className="h-10 w-10 text-destructive" />
+          <p className="text-sm text-muted-foreground">{t("errors:loadFailed")}</p>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => window.location.reload()}>
+            <RefreshCw className="h-3 w-3" />{t("errors:retry")}
+          </Button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

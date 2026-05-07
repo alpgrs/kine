@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Receipt, Download } from "lucide-react";
+import { Receipt, Download, FileDown, AlertCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -35,20 +35,24 @@ function InvoicingPage() {
   const [pending, setPending] = useState<ApptRow[]>([]);
   const [invoices, setInvoices] = useState<Inv[]>([]);
   const [org, setOrg] = useState<any>(null);
+  const [loadError, setLoadError] = useState(false);
 
   const load = async () => {
+    setLoadError(false);
     if (!activeOrg) return;
-    const { data: orgData } = await supabase.from("organizations").select("*").eq("id", activeOrg.id).maybeSingle();
+    const [{ data: orgData, error: orgErr }, { data: invs, error: invErr }] = await Promise.all([
+      supabase.from("organizations").select("*").eq("id", activeOrg.id).maybeSingle(),
+      supabase.from("invoices").select("*").eq("organization_id", activeOrg.id).order("issued_at", { ascending: false }),
+    ]);
+    if (orgErr || invErr) { setLoadError(true); return; }
     setOrg(orgData);
-
-    const { data: invs } = await supabase.from("invoices").select("*")
-      .eq("organization_id", activeOrg.id).order("issued_at", { ascending: false });
     setInvoices((invs ?? []) as Inv[]);
 
     const billedAppts = new Set((invs ?? []).map((i: any) => i.line_items?.[0]?.appointment_id).filter(Boolean));
-    const { data: appts } = await supabase.from("appointments")
+    const { data: appts, error: apptErr } = await supabase.from("appointments")
       .select("id,patient_first_name,patient_last_name,patient_email,start_time,service:services(name,price_cents)")
       .eq("organization_id", activeOrg.id).eq("status", "completed").order("start_time", { ascending: false });
+    if (apptErr) { setLoadError(true); return; }
     setPending(((appts ?? []) as any).filter((a: ApptRow) => !billedAppts.has(a.id)));
   };
   useEffect(() => { void load(); /* eslint-disable-next-line */ }, [activeOrg]);
@@ -61,7 +65,7 @@ function InvoicingPage() {
     const amountExcl = vatExempt ? amount : Math.round(amount / 1.21);
     const vatAmount = amount - amountExcl;
 
-    const { data: numData } = await supabase.rpc("generate_invoice_number");
+    const { data: numData } = await supabase.rpc("generate_invoice_number", { _org_id: activeOrg.id });
     const number = numData as unknown as string;
 
     const { data: inv, error } = await supabase.from("invoices").insert({
@@ -77,7 +81,35 @@ function InvoicingPage() {
     downloadPdf(inv as Inv);
   };
 
-  const downloadPdf = (inv: Inv) => {
+  const exportCsv = () => {
+    const rows = [
+      ["N° Facture", "Date", "Patient", "Prestation", "Montant HT (€)", "TVA (%)", "TVA (€)", "Total TTC (€)", "Statut"],
+      ...invoices.map((i) => {
+        const li = (i.line_items as any[])[0];
+        const exclVat = (i.amount / (1 + (i as any).vat_rate / 100) / 100).toFixed(2);
+        const vatAmt = (i.amount / 100 - parseFloat(exclVat)).toFixed(2);
+        return [
+          i.number,
+          format(new Date(i.issued_at), "dd/MM/yyyy"),
+          i.patient_name ?? "",
+          li?.description ?? "",
+          i.vat_exempt ? (i.amount / 100).toFixed(2) : exclVat,
+          i.vat_exempt ? "0" : String((i as any).vat_rate ?? 21),
+          i.vat_exempt ? "0.00" : vatAmt,
+          (i.amount / 100).toFixed(2),
+          i.status,
+        ];
+      }),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `factures-${format(new Date(), "yyyy-MM")}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  const downloadPdf = async (inv: Inv) => {
     const doc = new jsPDF();
     const o = org;
     doc.setFontSize(20); doc.text(o?.name ?? "", 20, 25);
@@ -131,8 +163,41 @@ function InvoicingPage() {
       doc.setTextColor(0);
     }
 
+    // Store PDF in Supabase storage (private invoices bucket) and update pdf_url
+    if (org?.id) {
+      try {
+        const pdfBuffer = doc.output("arraybuffer");
+        const path = `${org.id}/${inv.number}.pdf`;
+        const { error: uploadErr } = await supabase.storage.from("invoices").upload(path, pdfBuffer, {
+          contentType: "application/pdf", upsert: true,
+        });
+        if (!uploadErr) {
+          await supabase.from("invoices").update({ pdf_url: path }).eq("id", inv.id);
+          toast.success(t("invoicing:pdfSaved"));
+        } else {
+          toast.warning(t("invoicing:pdfSaveError"));
+        }
+      } catch {
+        toast.warning(t("invoicing:pdfSaveError"));
+      }
+    }
     doc.save(`${inv.number}.pdf`);
   };
+
+  if (loadError) {
+    return (
+      <>
+        <PageHeader title={t("invoicing:title")} />
+        <div className="flex flex-col items-center gap-3 py-20 text-center">
+          <AlertCircle className="h-10 w-10 text-destructive" />
+          <p className="text-sm text-muted-foreground">{t("errors:loadFailed")}</p>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => void load()}>
+            <RefreshCw className="h-3 w-3" />{t("errors:retry")}
+          </Button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -169,6 +234,14 @@ function InvoicingPage() {
         </TabsContent>
         <TabsContent value="issued">
           <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-base">{t("invoicing:issued")} ({invoices.length})</CardTitle>
+              {invoices.length > 0 && (
+                <Button size="sm" variant="outline" className="gap-1" onClick={exportCsv}>
+                  <FileDown className="h-3 w-3" />{t("invoicing:exportCsv")}
+                </Button>
+              )}
+            </CardHeader>
             <CardContent className="p-0">
               {invoices.length === 0 ? (
                 <p className="py-12 text-center text-sm text-muted-foreground">{t("invoicing:noInvoices")}</p>
@@ -180,7 +253,7 @@ function InvoicingPage() {
                         <p className="font-medium">{i.number}</p>
                         <p className="text-xs text-muted-foreground">{i.patient_name} · {format(new Date(i.issued_at), "dd/MM/yyyy")} · {(i.amount / 100).toFixed(2)} €</p>
                       </div>
-                      <Button size="sm" variant="outline" className="gap-1" onClick={() => downloadPdf(i)}>
+                      <Button size="sm" variant="outline" className="gap-1" onClick={() => void downloadPdf(i)}>
                         <Download className="h-3 w-3" />PDF
                       </Button>
                     </li>

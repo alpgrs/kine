@@ -70,6 +70,11 @@ function SignupPage() {
           {loading ? t("loading") : t("auth:signUpBtn")}
         </Button>
         <p className="pt-2 text-center text-xs text-muted-foreground">
+          {t("auth:dpaNotice")}{" "}
+          <Link to="/privacy" className="font-medium text-primary hover:underline">{t("auth:dpaLink")}</Link>
+          {" "}{t("auth:dpaNote")}
+        </p>
+        <p className="text-center text-xs text-muted-foreground">
           {t("auth:alreadyAccount")}{" "}
           <Link to="/login" className="font-medium text-primary hover:underline">{t("auth:login")}</Link>
         </p>

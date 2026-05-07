@@ -234,6 +234,9 @@ function BookPage() {
                 <div>
                   <Label>{t("booking:yourPhone")}</Label>
                   <Input className="h-11" required autoComplete="tel" inputMode="tel" placeholder="+32 4xx xx xx xx" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                  <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                    <span>🔒</span> {t("booking:phoneRgpd")}
+                  </p>
                 </div>
                 {/* Honeypot — must remain empty */}
                 <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] -top-[9999px] h-0 w-0 overflow-hidden opacity-0">
